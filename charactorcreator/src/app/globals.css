@@ -90,3 +90,44 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.avatar-customizer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar-display img {
+  width: 128px;
+  height: 128px;
+}
+
+.attribute-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn.active {
+  background-color: #0056b3;
+}
+
+.preview-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.preview-display img {
+  width: 128px;
+  height: 128px;
+}

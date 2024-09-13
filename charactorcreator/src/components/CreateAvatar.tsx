@@ -1,145 +1,29 @@
 "use client";
-import { useMemo, useState } from "react";
-import { createAvatar, schema } from "@dicebear/core";
-import { openPeeps } from "@dicebear/collection";
-import { JSONSchema7 } from "json-schema";
-
-// Define your options
-const options = {
-  ...schema.properties,
-  ...openPeeps.schema.properties,
-};
-
-// Safely access the enum if it exists
-const getEnumChoices = (property: JSONSchema7 | undefined): string[] => {
-  if (
-    property &&
-    property.type === "array" &&
-    typeof property.items === "object" &&
-    property.items !== null &&
-    !Array.isArray(property.items) &&
-    "enum" in property.items
-  ) {
-    return (property.items.enum as string[]) || [];
-  }
-  return [];
-};
-
-// Extract choices safely
-const avatarAccessoriesChoices = getEnumChoices(
-  options.accessories as JSONSchema7
-);
-const avatarFaceChoice = getEnumChoices(options.face as JSONSchema7);
-
-const avatarFacialHairChoice = getEnumChoices(
-  options.facialHair as JSONSchema7
-);
-const avatarHeadChoice = getEnumChoices(options.head as JSONSchema7);
-
-const defaultClothingColors = options.clothingColor?.default as string[];
-
-const defaultHeadContrastColor = options.headContrastColor?.default as string[];
-
-const defaultSkinColors = options.skinColor?.default as string[];
-
-// console.log("avatarAccessoriesChoices", avatarAccessoriesChoices);
-// console.log("skincolor", options.skinColor);
+import { useAvatar } from "../app/context/AvatarContext";
+import React from "react";
 
 function CreateAvatar() {
-  // Set up state to track selected options
-  const [selectedAccessories, setSelectedAccessories] = useState<string>(
-    avatarAccessoriesChoices[0] || ""
-  );
-  const [selectedFace, setSelectedFace] = useState<string>(
-    avatarFaceChoice[0] || ""
-  );
+  const avatarContext = useAvatar();
 
-  const [selectedFacialHair, setSelectedFacialHair] = useState<string>(
-    avatarFacialHairChoice[0] || ""
-  );
-  const [selectedHead, setSelectedHead] = useState<string>(
-    avatarHeadChoice[0] || ""
-  );
+  console.log("Avatar Context:", avatarContext);
 
-  const [clothingColor, setClothingColor] = useState<string>(
-    defaultClothingColors[0] || "#8fa7df"
-  );
-
-  const [headContrastColor, setHeadContrastColor] = useState<string>(
-    defaultHeadContrastColor[0] || "#2c1b18"
-  );
-
-  const [skinColor, setSkinColor] = useState<string>(
-    defaultSkinColors[0] || "#694d3d"
-  );
-
-  const accessoriesProbability = selectedAccessories ? 100 : 0;
-
-  const facialHairProbability = selectedFacialHair ? 100 : 0;
-
-  // Function to create the avatar using selected options
-  const avatar = useMemo(() => {
-    return createAvatar(openPeeps, {
-      size: 128,
-      accessories: [selectedAccessories],
-      accessoriesProbability: accessoriesProbability,
-      face: [selectedFace],
-      facialHair: [selectedFacialHair],
-      facialHairProbability: facialHairProbability,
-      head: [selectedHead],
-      clothingColor: [clothingColor],
-      headContrastColor: [headContrastColor],
-      skinColor: [skinColor],
-    }).toDataUri();
-  }, [
-    selectedAccessories,
-    accessoriesProbability,
-    selectedFace,
-    selectedFacialHair,
-    facialHairProbability,
-    selectedHead,
+  const {
+    avatarData,
+    setSelectedAccessories,
+    setSelectedFace,
+    setSelectedFacialHair,
+    setSelectedHead,
+    setClothingColor,
+    setHeadContrastColor,
+    setSkinColor,
+    avatarAccessoriesChoices,
+    avatarFaceChoices,
+    avatarFacialHairChoices,
+    avatarHeadChoices,
     clothingColor,
     headContrastColor,
     skinColor,
-  ]);
-
-  // Handle select menu changes
-  const handleAccessoriesChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedAccessories(event.target.value);
-  };
-
-  const handleFaceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFace(event.target.value);
-  };
-
-  const handleFacialHairChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedFacialHair(event.target.value);
-  };
-  const handleHeadChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedHead(event.target.value);
-  };
-
-  const handleClothingColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setClothingColor(event.target.value.replace("#", ""));
-  };
-
-  const handleHeadContrastColor = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setHeadContrastColor(event.target.value.replace("#", ""));
-  };
-
-  const handleSkinColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSkinColor(event.target.value.replace("#", ""));
-  };
+  } = avatarContext;
 
   return (
     <div>
@@ -147,8 +31,7 @@ function CreateAvatar() {
         <label htmlFor="accessories">Choose Accessories: </label>
         <select
           id="accessories"
-          value={selectedAccessories}
-          onChange={handleAccessoriesChange}
+          onChange={(e) => setSelectedAccessories(e.target.value)}
           className="text-blue-500"
         >
           <option value="">None</option>
@@ -164,11 +47,10 @@ function CreateAvatar() {
         <label htmlFor="face">Choose Face Type: </label>
         <select
           id="face"
-          value={selectedFace}
-          onChange={handleFaceChange}
+          onChange={(e) => setSelectedFace(e.target.value)}
           className="text-blue-500"
         >
-          {avatarFaceChoice.map((face) => (
+          {avatarFaceChoices.map((face) => (
             <option key={face} value={face}>
               {face}
             </option>
@@ -180,27 +62,26 @@ function CreateAvatar() {
         <label htmlFor="facialhair">Choose Facial Hair: </label>
         <select
           id="facialhair"
-          value={selectedFacialHair}
-          onChange={handleFacialHairChange}
+          onChange={(e) => setSelectedFacialHair(e.target.value)}
           className="text-blue-500"
         >
           <option value="">None</option>
-          {avatarFacialHairChoice.map((facialhair) => (
+          {avatarFacialHairChoices.map((facialhair) => (
             <option key={facialhair} value={facialhair}>
               {facialhair}
             </option>
           ))}
         </select>
       </div>
+
       <div>
         <label htmlFor="head">Choose Hair: </label>
         <select
           id="head"
-          value={selectedHead}
-          onChange={handleHeadChange}
+          onChange={(e) => setSelectedHead(e.target.value)}
           className="text-blue-500"
         >
-          {avatarHeadChoice.map((head) => (
+          {avatarHeadChoices.map((head) => (
             <option key={head} value={head}>
               {head}
             </option>
@@ -214,7 +95,7 @@ function CreateAvatar() {
           id="clothingColor"
           type="color"
           value={`#${clothingColor}`}
-          onChange={handleClothingColorChange}
+          onChange={(e) => setClothingColor(e.target.value.replace("#", ""))}
         />
       </div>
 
@@ -224,7 +105,9 @@ function CreateAvatar() {
           id="hairColor"
           type="color"
           value={`#${headContrastColor}`}
-          onChange={handleHeadContrastColor}
+          onChange={(e) =>
+            setHeadContrastColor(e.target.value.replace("#", ""))
+          }
         />
       </div>
 
@@ -234,13 +117,13 @@ function CreateAvatar() {
           id="skinColor"
           type="color"
           value={`#${skinColor}`}
-          onChange={handleSkinColorChange}
+          onChange={(e) => setSkinColor(e.target.value.replace("#", ""))}
         />
       </div>
 
       <div>
         {/* Render the generated avatar */}
-        <img src={avatar} alt="Avatar" />
+        <img src={avatarData} alt="Avatar" />
       </div>
     </div>
   );
