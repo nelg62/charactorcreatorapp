@@ -123,23 +123,41 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     const randomChoice = (choices: string[]) =>
       choices[Math.floor(Math.random() * choices.length)];
 
-    setSelectedAccessories(randomChoice(avatarAccessoriesChoices));
-    setSelectedFace(randomChoice(avatarFaceChoices));
-    setSelectedFacialHair(randomChoice(avatarFacialHairChoices));
-    setSelectedHead(randomChoice(avatarHeadChoices));
-    setSelectedBackgroundType(randomChoice(avatarBackgroundTypeChoices));
+    const randomAccessoryIndex = Math.floor(
+      Math.random() * avatarAccessoriesChoices.length
+    );
+    const randomFaceIndex = Math.floor(
+      Math.random() * avatarFaceChoices.length
+    );
+    const randomFacialHairIndex = Math.floor(
+      Math.random() * avatarFacialHairChoices.length
+    );
+    const randomHeadIndex = Math.floor(
+      Math.random() * avatarHeadChoices.length
+    );
+    const randomBackgroundIndex = Math.floor(
+      Math.random() * avatarBackgroundTypeChoices.length
+    );
+
+    setSelectedAccessories(avatarAccessoriesChoices[randomAccessoryIndex]);
+    setSelectedFace(avatarFaceChoices[randomFaceIndex]);
+    setSelectedFacialHair(avatarFacialHairChoices[randomFacialHairIndex]);
+    setSelectedHead(avatarHeadChoices[randomHeadIndex]);
+    setSelectedBackgroundType(
+      avatarBackgroundTypeChoices[randomBackgroundIndex]
+    );
 
     setClothingColor(randomChoice(defaultClothingColors));
     setHeadContrastColor(randomChoice(defaultHeadContrastColors));
     setSkinColor(randomChoice(defaultSkinColors));
 
-    // if (avatarBackgroundTypeChoices.includes("gradientLinear")) {
-    //   setBackgroundColor(randomChoice(defaultBackgroundColors));
-    //   setBackgroundColor2(randomChoice(defaultBackgroundColors));
-    // } else {
-    //   setBackgroundColor(randomChoice(defaultBackgroundColors));
-    //   setBackgroundColor2(randomChoice(defaultBackgroundColors));
-    // }
+    return {
+      accessoryIndex: randomAccessoryIndex,
+      faceIndex: randomFaceIndex,
+      facialHairIndex: randomFacialHairIndex,
+      headIndex: randomHeadIndex,
+      backgroundTypeIndex: randomBackgroundIndex,
+    };
   };
 
   const randomizeAccessories = () => {

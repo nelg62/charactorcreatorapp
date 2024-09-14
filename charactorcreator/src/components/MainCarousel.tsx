@@ -108,6 +108,16 @@ export default function AvatarCustomizer() {
     }
   };
 
+  const handleRandomizeAll = () => {
+    const randomChoiceIndex = randomizeAvatar();
+
+    setAccessoryIndex(randomChoiceIndex.accessoryIndex);
+    setFaceIndex(randomChoiceIndex.faceIndex);
+    setFacialHairIndex(randomChoiceIndex.facialHairIndex);
+    setHeadIndex(randomChoiceIndex.headIndex);
+    setBackgroundTypeIndex(randomChoiceIndex.backgroundTypeIndex);
+  };
+
   const handlePrevious = () => {
     if (activeAttribute === "accessories") {
       setAccessoryIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
@@ -268,7 +278,7 @@ export default function AvatarCustomizer() {
       <button onClick={handleRandomize} className="btn">
         Randomize {activeAttribute}
       </button>
-      <button onClick={randomizeAvatar} className="btn">
+      <button onClick={handleRandomizeAll} className="btn">
         Randomize All
       </button>
       <div className="preview-container">
