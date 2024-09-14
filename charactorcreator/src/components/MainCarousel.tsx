@@ -35,26 +35,6 @@ export default function AvatarCustomizer() {
     randomizeAvatar,
   } = useAvatar();
 
-  const handleRandomize = () => {
-    switch (activeAttribute) {
-      case "accessories":
-        randomizeAccessories();
-        break;
-      case "face":
-        randomizeFace();
-        break;
-      case "facialHair":
-        randomizeFacialHair();
-        break;
-      case "head":
-        randomizeHead();
-        break;
-
-      default:
-        break;
-    }
-  };
-
   const [accessoryIndex, setAccessoryIndex] = useState(0);
   const [faceIndex, setFaceIndex] = useState(0);
   const [facialHairIndex, setFacialHairIndex] = useState(0);
@@ -111,6 +91,22 @@ export default function AvatarCustomizer() {
       head: avatarHeadChoices,
       background: avatarBackgroundTypeChoices,
     }[activeAttribute] || [];
+
+  const handleRandomize = () => {
+    const randomIndex = Math.floor(Math.random() * choices.length);
+
+    if (activeAttribute === "accessories") {
+      setAccessoryIndex(randomIndex);
+    } else if (activeAttribute === "face") {
+      setFaceIndex(randomIndex);
+    } else if (activeAttribute === "facialHair") {
+      setFacialHairIndex(randomIndex);
+    } else if (activeAttribute === "head") {
+      setHeadIndex(randomIndex);
+    } else if (activeAttribute === "background") {
+      setBackgroundTypeIndex(randomIndex);
+    }
+  };
 
   const handlePrevious = () => {
     if (activeAttribute === "accessories") {
