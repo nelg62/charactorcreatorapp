@@ -57,6 +57,13 @@ const getEnumChoices = (property: JSONSchema7 | undefined): string[] => {
   return [];
 };
 
+const getDefault = (property: JSONSchema7 | undefined): string[] => {
+  if (property && "default" in property) {
+    return (property.default as string[]) || [];
+  }
+  return [];
+};
+
 // Extract default options and color sets
 const avatarAccessoriesChoices = getEnumChoices(
   options.accessories as JSONSchema7
@@ -70,12 +77,15 @@ const avatarBackgroundTypeChoices = getEnumChoices(
   options.backgroundType as JSONSchema7
 );
 
-const defaultClothingColors = options.clothingColor?.default as string[];
-const defaultHeadContrastColors = options.headContrastColor
-  ?.default as string[];
-const defaultSkinColors = options.skinColor?.default as string[];
+const defaultClothingColors = getDefault(options.clothingColor as JSONSchema7);
+const defaultHeadContrastColors = getDefault(
+  options.headContrastColor as JSONSchema7
+);
+const defaultSkinColors = getDefault(options.skinColor as JSONSchema7);
 
-const defaultBackgroundColors = options.backgroundColor as string[];
+const defaultBackgroundColors = getDefault(
+  options.backgroundColor as JSONSchema7
+);
 
 // Create Avatar Context
 const AvatarContext = createContext<AvatarContextType | null>(null);
