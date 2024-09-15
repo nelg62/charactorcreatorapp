@@ -12,6 +12,36 @@ const options = {
   ...openPeeps.schema.properties,
 };
 
+interface AvatarContextType {
+  avatarData: string; // The data URI of the generated avatar
+  setSelectedAccessories: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedFace: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedFacialHair: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedHead: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedBackgroundType: React.Dispatch<React.SetStateAction<string>>;
+  setClothingColor: React.Dispatch<React.SetStateAction<string>>;
+  setHeadContrastColor: React.Dispatch<React.SetStateAction<string>>;
+  setSkinColor: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundColor: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundColor2: React.Dispatch<React.SetStateAction<string>>;
+  randomizeAvatar: () => void;
+  randomizeAccessories: () => void;
+  randomizeFace: () => void;
+  randomizeFacialHair: () => void;
+  randomizeHead: () => void;
+  avatarAccessoriesChoices: string[];
+  avatarFaceChoices: string[];
+  avatarFacialHairChoices: string[];
+  avatarHeadChoices: string[];
+  avatarBackgroundTypeChoices: string[];
+  clothingColor: string;
+  headContrastColor: string;
+  skinColor: string;
+  backgroundColor: string;
+  backgroundColor2: string;
+  selectedBackgroundType: string;
+}
+
 // Helper function to extract choices from schema enums
 const getEnumChoices = (property: JSONSchema7 | undefined): string[] => {
   if (
@@ -48,7 +78,7 @@ const defaultSkinColors = options.skinColor?.default as string[];
 const defaultBackgroundColors = options.backgroundColor as string[];
 
 // Create Avatar Context
-const AvatarContext = createContext<any>(null);
+const AvatarContext = createContext<AvatarContextType | null>(null);
 
 export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedAccessories, setSelectedAccessories] = useState<string>(
