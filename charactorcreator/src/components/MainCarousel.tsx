@@ -27,11 +27,6 @@ export default function AvatarCustomizer() {
     setBackgroundColor,
     setBackgroundColor2,
     setSelectedBackgroundType,
-    randomizeAccessories,
-    randomizeFace,
-    randomizeFacialHair,
-    randomizeHead,
-    randomizeBackground,
     randomizeAvatar,
   } = useAvatar();
 

@@ -1,9 +1,3 @@
-import MainCarousel from "@/components/MainCarousel";
-import ResizableMenu from "@/components/ResizableMenu";
-import { Progress } from "@/components/ui/progress";
-import CreateCharacterForm from "@/components/CharacterCreatorForm";
-import Image from "next/image";
-import CreateAvatar from "@/components/CreateAvatar";
 import AvatarCustomizer from "@/components/MainCarousel";
 
 export default function Home() {
