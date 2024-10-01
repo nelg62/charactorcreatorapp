@@ -1,55 +1,75 @@
 "use client";
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
-import { useEffect, useMemo, useState } from "react";
+import { createAvatar, schema, Options } from "@dicebear/core";
+import { useMemo, useState } from "react";
 
 export default function AvatarCustomizer() {
   const {
     avatarData,
-    avatarAccessoriesChoices,
     setSelectedAccessories,
-    selectedAccessoryIndex,
-    setSelectedAccessoryIndex,
+    avatarAccessoriesChoices,
+    setSelectedFace,
+    avatarFaceChoices,
+    accessoriesEnabled,
+    setAccessoriesEnabled,
+    setSelectedFacialHair,
+    facialHairEnabled,
+    avatarFacialHairChoices,
+    setFacialHairEnabled,
+    clothingColor,
+    setClothingColor,
   } = useAvatar();
-
   const [accessoryIndex, setAccessoryIndex] = useState(0);
+  const [faceIndex, setFaceIndex] = useState(0);
+  const [facialHairIndex, setFacialHairIndex] = useState(0);
 
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
-  const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
-  const [facialHairEnabled, setFacialHairEnabled] = useState(true);
-
   const updateAvatar = () => {
-    if (activeAttribute === "accessories" && accessoriesEnabled) {
-      setSelectedAccessories(avatarAccessoriesChoices[selectedAccessoryIndex]);
-    } else {
-      setSelectedAccessories("");
+    if (activeAttribute === "accessories") {
+      setSelectedAccessories(
+        accessoriesEnabled ? avatarAccessoriesChoices[accessoryIndex] : ""
+      );
+    } else if (activeAttribute === "face") {
+      setSelectedFace(avatarFaceChoices[faceIndex]);
+    } else if (activeAttribute === "facialHair") {
+      setSelectedFacialHair(
+        facialHairEnabled ? avatarFacialHairChoices[facialHairIndex] : ""
+      );
     }
   };
 
-  useEffect(() => {
+  useMemo(() => {
     updateAvatar();
-  }, [activeAttribute, selectedAccessoryIndex, accessoriesEnabled]);
+  }, [accessoryIndex, faceIndex, facialHairIndex]);
 
   const choices =
     {
       accessories: avatarAccessoriesChoices,
+      face: avatarFaceChoices,
+      facialHair: avatarFacialHairChoices,
     }[activeAttribute] || [];
 
+  // Previous Button
   const handlePrevious = () => {
     if (activeAttribute === "accessories") {
-      setSelectedAccessoryIndex((prev) =>
-        prev > 0 ? prev - 1 : choices.length - 1
-      );
+      setAccessoryIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+    } else if (activeAttribute === "face") {
+      setFaceIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+    } else if (activeAttribute === "facialHair") {
+      setFacialHairIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
     }
   };
 
+  // Next Button
   const handleNext = () => {
     if (activeAttribute === "accessories") {
-      setSelectedAccessoryIndex((prev) =>
-        prev < choices.length - 1 ? prev + 1 : 0
-      );
+      setAccessoryIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+    } else if (activeAttribute === "face") {
+      setFaceIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+    } else if (activeAttribute === "facialHair") {
+      setFacialHairIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
     }
   };
 
@@ -69,7 +89,7 @@ export default function AvatarCustomizer() {
       </div>
 
       {/* Attribute Selector */}
-      <div className="attribute-selector">
+      <div className="attribure-selector">
         <button
           onClick={() => setActiveAttribute("accessories")}
           className={`btn ${activeAttribute === "accessories" ? "active" : ""}`}
@@ -88,21 +108,9 @@ export default function AvatarCustomizer() {
         >
           Facial Hair
         </button>
-        <button
-          onClick={() => setActiveAttribute("head")}
-          className={`btn ${activeAttribute === "head" ? "active" : ""}`}
-        >
-          Head
-        </button>
-        <button
-          onClick={() => setActiveAttribute("background")}
-          className={`btn ${activeAttribute === "background" ? "active" : ""}`}
-        >
-          Background
-        </button>
       </div>
 
-      {/* Toggle Button for Accessories or Facial Hair */}
+      {/* Toggle Button for Accessories*/}
       {activeAttribute === "accessories" && (
         <div className="toggle-container">
           <button onClick={toggleAccessories} className="btn toggle-btn">
@@ -118,31 +126,57 @@ export default function AvatarCustomizer() {
         </div>
       )}
 
+      {/* Choose Colors */}
+
+      <div className="color-pickers">
+        <div>
+          <label htmlFor="clothingcolor">Clothing Color: </label>
+          <input
+            type="color"
+            id="clothingcolor"
+            value={`#${clothingColor}`}
+            onChange={(e) => setClothingColor(e.target.value.replace("#", ""))}
+          />
+        </div>
+      </div>
+
       <div className="preview-container">
+        {/* Previous button */}
         <button onClick={handlePrevious} className="btn">
           Previous
         </button>
 
+        {/* Display preview of current attribute choice */}
         <div className="preview-display">
-          {/* Display preview of current attribute choice */}
           {choices.length > 0 && (
             <img
               src={createAvatar(openPeeps, {
                 size: 128,
                 accessories:
                   activeAttribute === "accessories" && accessoriesEnabled
-                    ? [choices[selectedAccessoryIndex]]
+                    ? [choices[accessoryIndex]]
                     : [],
                 accessoriesProbability:
                   activeAttribute === "accessories" && accessoriesEnabled
                     ? 100
                     : 0,
+                face: activeAttribute === "face" ? [choices[faceIndex]] : [],
+                facialHair:
+                  activeAttribute === "facialHair" && facialHairEnabled
+                    ? [choices[facialHairIndex]]
+                    : [],
+                facialHairProbability:
+                  activeAttribute === "facialHair" && facialHairEnabled
+                    ? 100
+                    : 0,
+                clothingColor: [clothingColor],
               }).toDataUri()}
               alt={`Preview ${activeAttribute} option`}
             />
           )}
         </div>
 
+        {/* Next Button */}
         <button onClick={handleNext} className="btn">
           Next
         </button>
