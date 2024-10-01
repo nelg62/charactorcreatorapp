@@ -16,10 +16,14 @@ export default function AvatarCustomizer() {
     avatarFacialHairChoices,
     setSelectedHead,
     avatarHeadChoices,
+    setSelectedMask,
+    avatarMaskChoices,
     accessoriesEnabled,
     setAccessoriesEnabled,
     facialHairEnabled,
     setFacialHairEnabled,
+    maskEnabled,
+    setMaskEnabled,
     clothingColor,
     setClothingColor,
     headContrastColor,
@@ -31,6 +35,7 @@ export default function AvatarCustomizer() {
   const [faceIndex, setFaceIndex] = useState(0);
   const [facialHairIndex, setFacialHairIndex] = useState(0);
   const [headIndex, setHeadIndex] = useState(0);
+  const [maskIndex, setMaskIndex] = useState(0);
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
   const attributeChoices =
@@ -39,6 +44,7 @@ export default function AvatarCustomizer() {
       face: avatarFaceChoices,
       facialHair: avatarFacialHairChoices,
       head: avatarHeadChoices,
+      mask: avatarMaskChoices,
     }[activeAttribute] || [];
 
   const updateAvatar = () => {
@@ -54,12 +60,14 @@ export default function AvatarCustomizer() {
       );
     } else if (activeAttribute === "head") {
       setSelectedHead(avatarHeadChoices[headIndex]);
+    } else if (activeAttribute === "mask") {
+      setSelectedMask(maskEnabled ? avatarMaskChoices[maskIndex] : "");
     }
   };
 
   useMemo(
     () => updateAvatar(),
-    [accessoryIndex, faceIndex, facialHairIndex, headIndex]
+    [accessoryIndex, faceIndex, facialHairIndex, headIndex, maskIndex]
   );
 
   // Generalized Navigation fuunction
@@ -69,6 +77,7 @@ export default function AvatarCustomizer() {
       face: setFaceIndex,
       facialHair: setFacialHairIndex,
       head: setHeadIndex,
+      mask: setMaskIndex,
     };
 
     const currentSetter = indexSetters[activeAttribute];
@@ -85,16 +94,19 @@ export default function AvatarCustomizer() {
   };
 
   // General toggle function
-  const toggleAttribute = (attribute: "accessories" | "facialHair") => {
+  const toggleAttribute = (
+    attribute: "accessories" | "facialHair" | "mask"
+  ) => {
     const toggles = {
       accessories: () => setAccessoriesEnabled(!accessoriesEnabled),
       facialHair: () => setFacialHairEnabled(!facialHairEnabled),
+      mask: () => setMaskEnabled(!maskEnabled),
     };
     toggles[attribute]?.();
   };
 
   // // Button Choice Text
-  const buttonChoices = ["accessories", "face", "facialHair", "head"];
+  const buttonChoices = ["accessories", "face", "facialHair", "head", "mask"];
 
   return (
     <div className="avatar-customizer">
@@ -118,11 +130,14 @@ export default function AvatarCustomizer() {
 
       {/* Toggle Button for Accessories and facial hair*/}
       {(activeAttribute === "accessories" ||
-        activeAttribute === "facialHair") && (
+        activeAttribute === "facialHair" ||
+        activeAttribute === "mask") && (
         <div className="toggle-container">
           <button
             onClick={() =>
-              toggleAttribute(activeAttribute as "accessories" | "facialHair")
+              toggleAttribute(
+                activeAttribute as "accessories" | "facialHair" | "mask"
+              )
             }
             className="btn toggle-btn"
           >
@@ -130,9 +145,15 @@ export default function AvatarCustomizer() {
               ? accessoriesEnabled
                 ? "Disable Accessories"
                 : "Enable Accessories"
-              : facialHairEnabled
-              ? "Disable Facial Hair"
-              : "Enable Facial Hair"}
+              : activeAttribute === "facialHair"
+              ? facialHairEnabled
+                ? "Disable Facial Hair"
+                : "Enable Facial Hair"
+              : activeAttribute === "mask"
+              ? maskEnabled
+                ? "Disable Mask"
+                : "Enable Mask"
+              : ""}
           </button>
         </div>
       )}
@@ -201,6 +222,12 @@ export default function AvatarCustomizer() {
                   activeAttribute === "head"
                     ? [attributeChoices[headIndex]]
                     : [],
+                mask:
+                  activeAttribute === "mask" && maskEnabled
+                    ? [attributeChoices[maskIndex]]
+                    : [],
+                maskProbability:
+                  activeAttribute === "mask" && maskEnabled ? 100 : 0,
                 clothingColor: [clothingColor],
                 headContrastColor: [headContrastColor],
               }).toDataUri()}

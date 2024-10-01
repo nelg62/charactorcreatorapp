@@ -67,16 +67,20 @@ export function getOptionsBySchema(schema: JSONSchema7) {
 // Get avatar options
 const avatarChoices = getOptionsBySchema(openPeeps.schema);
 
+console.log("avatarChoices", avatarChoices);
+
 // Typing for avatar options
 const avatarAccessoriesChoices = avatarChoices.accessories.choices;
 const avatarFaceChoices = avatarChoices.face.choices;
 const avatarFacialHairChoices = avatarChoices.facialHair.choices;
 const avatarHeadChoices = avatarChoices.head.choices;
+const avatarMaskChoices = avatarChoices.mask.choices;
 
 type AccessoryType = typeof avatarAccessoriesChoices;
 type FaceType = typeof avatarFaceChoices;
 type FacialHairType = typeof avatarFacialHairChoices;
 type HeadType = typeof avatarHeadChoices;
+type MaskType = typeof avatarMaskChoices;
 
 // Avatar context type
 interface AvatarContextType {
@@ -85,16 +89,20 @@ interface AvatarContextType {
   setSelectedFace: (face: FaceType) => void;
   setSelectedFacialHair: (facialHair: FacialHairType) => void;
   setSelectedHead: (head: HeadType) => void;
+  setSelectedMask: (mask: MaskType) => void;
   setAccessoriesEnabled: Dispatch<SetStateAction<boolean>>;
   setFacialHairEnabled: Dispatch<SetStateAction<boolean>>;
+  setMaskEnabled: Dispatch<SetStateAction<boolean>>;
   setClothingColor: Dispatch<SetStateAction<string>>;
   setHeadContrastColor: Dispatch<SetStateAction<string>>;
   avatarAccessoriesChoices: AccessoryType;
   avatarFaceChoices: FaceType;
   avatarFacialHairChoices: FacialHairType;
   avatarHeadChoices: HeadType;
+  avatarMaskChoices: MaskType;
   accessoriesEnabled: boolean;
   facialHairEnabled: boolean;
+  maskEnabled: boolean;
   clothingColor: string;
   headContrastColor: string;
 }
@@ -118,13 +126,19 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     avatarHeadChoices[0]
   );
 
-  const [clothingColor, setClothingColor] = useState<string>("#8fa7df");
-  const [headContrastColor, setHeadContrastColor] = useState<string>("#2c1b18");
+  const [selectedMask, setSelectedMask] = useState<MaskType>(
+    avatarMaskChoices[0]
+  );
+
+  const [clothingColor, setClothingColor] = useState<string>("8fa7df");
+  const [headContrastColor, setHeadContrastColor] = useState<string>("2c1b18");
   const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
   const [facialHairEnabled, setFacialHairEnabled] = useState(true);
+  const [maskEnabled, setMaskEnabled] = useState(true);
 
   const accessoriesProbability = accessoriesEnabled ? 100 : 0;
   const facialHairProbability = facialHairEnabled ? 100 : 0;
+  const maskProbability = maskEnabled ? 100 : 0;
 
   const avatarData = useMemo(() => {
     return createAvatar(openPeeps, {
@@ -135,6 +149,8 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
       facialHair: [selectedFacialHair],
       facialHairProbability,
       head: [selectedHead],
+      mask: [selectedMask],
+      maskProbability,
       clothingColor: [clothingColor],
       headContrastColor: [headContrastColor],
     }).toDataUri();
@@ -145,6 +161,8 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     selectedFacialHair,
     facialHairProbability,
     selectedHead,
+    selectedMask,
+    maskProbability,
     clothingColor,
     headContrastColor,
   ]);
@@ -157,16 +175,20 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         setSelectedFace,
         setSelectedFacialHair,
         setSelectedHead,
+        setSelectedMask,
         setAccessoriesEnabled,
         setFacialHairEnabled,
+        setMaskEnabled,
         setClothingColor,
         setHeadContrastColor,
         avatarAccessoriesChoices,
         avatarFaceChoices,
         avatarFacialHairChoices,
         avatarHeadChoices,
+        avatarMaskChoices,
         accessoriesEnabled,
         facialHairEnabled,
+        maskEnabled,
         clothingColor,
         headContrastColor,
       }}

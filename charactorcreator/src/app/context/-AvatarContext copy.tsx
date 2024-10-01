@@ -75,8 +75,8 @@ const facialHairChoices = avatarChoices.facialHair.choices || [];
 // face -----
 // facialHair -----
 // facialhairprobability -----
-// head
-// headcontrastcolor
+// head -----
+// headcontrastcolor ---
 // Mask
 // maskprobability
 // skincolor
