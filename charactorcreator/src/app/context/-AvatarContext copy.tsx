@@ -77,9 +77,11 @@ const facialHairChoices = avatarChoices.facialHair.choices || [];
 // facialhairprobability -----
 // head -----
 // headcontrastcolor ---
-// Mask
-// maskprobability
-// skincolor
+// Mask ---
+// maskprobability---
+// skincolor ----
+// background color ---
+// bacgound type
 
 console.log("avatarChoices", avatarChoices);
 

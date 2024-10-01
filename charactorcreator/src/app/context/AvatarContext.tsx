@@ -96,6 +96,7 @@ interface AvatarContextType {
   setClothingColor: Dispatch<SetStateAction<string>>;
   setHeadContrastColor: Dispatch<SetStateAction<string>>;
   setBackgroundColor: Dispatch<SetStateAction<string>>;
+  setSkinColor: Dispatch<SetStateAction<string>>;
   avatarAccessoriesChoices: AccessoryType;
   avatarFaceChoices: FaceType;
   avatarFacialHairChoices: FacialHairType;
@@ -107,6 +108,7 @@ interface AvatarContextType {
   clothingColor: string;
   headContrastColor: string;
   backgroundColor: string;
+  skinColor: string;
 }
 
 // Context initialization
@@ -135,9 +137,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [clothingColor, setClothingColor] = useState<string>("8fa7df");
   const [headContrastColor, setHeadContrastColor] = useState<string>("2c1b18");
   const [backgroundColor, setBackgroundColor] = useState<string>("b6e3f4");
+  const [skinColor, setSkinColor] = useState<string>("edb98a");
   const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
   const [facialHairEnabled, setFacialHairEnabled] = useState(true);
-  const [maskEnabled, setMaskEnabled] = useState(true);
+  const [maskEnabled, setMaskEnabled] = useState(false);
 
   const accessoriesProbability = accessoriesEnabled ? 100 : 0;
   const facialHairProbability = facialHairEnabled ? 100 : 0;
@@ -157,6 +160,7 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
       clothingColor: [clothingColor],
       headContrastColor: [headContrastColor],
       backgroundColor: [backgroundColor],
+      skinColor: [skinColor],
     }).toDataUri();
   }, [
     selectedAccessories,
@@ -170,6 +174,7 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     clothingColor,
     headContrastColor,
     backgroundColor,
+    skinColor,
   ]);
 
   return (
@@ -187,6 +192,7 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         setClothingColor,
         setHeadContrastColor,
         setBackgroundColor,
+        setSkinColor,
         avatarAccessoriesChoices,
         avatarFaceChoices,
         avatarFacialHairChoices,
@@ -198,6 +204,7 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         clothingColor,
         headContrastColor,
         backgroundColor,
+        skinColor,
       }}
     >
       {children}

@@ -30,6 +30,8 @@ export default function AvatarCustomizer() {
     setHeadContrastColor,
     backgroundColor,
     setBackgroundColor,
+    skinColor,
+    setSkinColor,
   } = useAvatar();
 
   // Index states
@@ -198,6 +200,18 @@ export default function AvatarCustomizer() {
             onChange={(e) =>
               setBackgroundColor(e.target.value.replace("#", ""))
             }
+          />
+        </div>
+      </div>
+
+      <div className="color-pickers">
+        <div>
+          <label htmlFor="skincolor">Skin Color: </label>
+          <input
+            type="color"
+            id="skincolor"
+            value={`#${skinColor}`}
+            onChange={(e) => setSkinColor(e.target.value.replace("#", ""))}
           />
         </div>
       </div>
