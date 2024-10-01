@@ -14,18 +14,23 @@ export default function AvatarCustomizer() {
     avatarFaceChoices,
     setSelectedFacialHair,
     avatarFacialHairChoices,
+    setSelectedHead,
+    avatarHeadChoices,
     accessoriesEnabled,
     setAccessoriesEnabled,
     facialHairEnabled,
     setFacialHairEnabled,
     clothingColor,
     setClothingColor,
+    headContrastColor,
+    setHeadContrastColor,
   } = useAvatar();
 
   // Index states
   const [accessoryIndex, setAccessoryIndex] = useState(0);
   const [faceIndex, setFaceIndex] = useState(0);
   const [facialHairIndex, setFacialHairIndex] = useState(0);
+  const [headIndex, setHeadIndex] = useState(0);
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
   const attributeChoices =
@@ -33,6 +38,7 @@ export default function AvatarCustomizer() {
       accessories: avatarAccessoriesChoices,
       face: avatarFaceChoices,
       facialHair: avatarFacialHairChoices,
+      head: avatarHeadChoices,
     }[activeAttribute] || [];
 
   const updateAvatar = () => {
@@ -46,10 +52,15 @@ export default function AvatarCustomizer() {
       setSelectedFacialHair(
         facialHairEnabled ? avatarFacialHairChoices[facialHairIndex] : ""
       );
+    } else if (activeAttribute === "head") {
+      setSelectedHead(avatarHeadChoices[headIndex]);
     }
   };
 
-  useMemo(() => updateAvatar(), [accessoryIndex, faceIndex, facialHairIndex]);
+  useMemo(
+    () => updateAvatar(),
+    [accessoryIndex, faceIndex, facialHairIndex, headIndex]
+  );
 
   // Generalized Navigation fuunction
   const handleNavigation = (direction: "next" | "previous") => {
@@ -57,6 +68,7 @@ export default function AvatarCustomizer() {
       accessories: setAccessoryIndex,
       face: setFaceIndex,
       facialHair: setFacialHairIndex,
+      head: setHeadIndex,
     };
 
     const currentSetter = indexSetters[activeAttribute];
@@ -139,6 +151,20 @@ export default function AvatarCustomizer() {
         </div>
       </div>
 
+      <div className="color-pickers">
+        <div>
+          <label htmlFor="headcontrastcolor">Head Contrast Color: </label>
+          <input
+            type="color"
+            id="headcontrastcolor"
+            value={`#${headContrastColor}`}
+            onChange={(e) =>
+              setHeadContrastColor(e.target.value.replace("#", ""))
+            }
+          />
+        </div>
+      </div>
+
       <div className="preview-container">
         {/* Previous button */}
         <button onClick={() => handleNavigation("previous")} className="btn">
@@ -171,7 +197,12 @@ export default function AvatarCustomizer() {
                   activeAttribute === "facialHair" && facialHairEnabled
                     ? 100
                     : 0,
+                head:
+                  activeAttribute === "head"
+                    ? [attributeChoices[headIndex]]
+                    : [],
                 clothingColor: [clothingColor],
+                headContrastColor: [headContrastColor],
               }).toDataUri()}
               alt={`Preview ${activeAttribute} option`}
             />

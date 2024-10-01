@@ -71,10 +71,12 @@ const avatarChoices = getOptionsBySchema(openPeeps.schema);
 const avatarAccessoriesChoices = avatarChoices.accessories.choices;
 const avatarFaceChoices = avatarChoices.face.choices;
 const avatarFacialHairChoices = avatarChoices.facialHair.choices;
+const avatarHeadChoices = avatarChoices.head.choices;
 
 type AccessoryType = typeof avatarAccessoriesChoices;
 type FaceType = typeof avatarFaceChoices;
 type FacialHairType = typeof avatarFacialHairChoices;
+type HeadType = typeof avatarHeadChoices;
 
 // Avatar context type
 interface AvatarContextType {
@@ -82,15 +84,19 @@ interface AvatarContextType {
   setSelectedAccessories: (accessory: AccessoryType) => void;
   setSelectedFace: (face: FaceType) => void;
   setSelectedFacialHair: (facialHair: FacialHairType) => void;
+  setSelectedHead: (head: HeadType) => void;
   setAccessoriesEnabled: Dispatch<SetStateAction<boolean>>;
   setFacialHairEnabled: Dispatch<SetStateAction<boolean>>;
   setClothingColor: Dispatch<SetStateAction<string>>;
+  setHeadContrastColor: Dispatch<SetStateAction<string>>;
   avatarAccessoriesChoices: AccessoryType;
   avatarFaceChoices: FaceType;
   avatarFacialHairChoices: FacialHairType;
+  avatarHeadChoices: HeadType;
   accessoriesEnabled: boolean;
   facialHairEnabled: boolean;
   clothingColor: string;
+  headContrastColor: string;
 }
 
 // Context initialization
@@ -108,7 +114,12 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     avatarFacialHairChoices[0]
   );
 
+  const [selectedHead, setSelectedHead] = useState<HeadType>(
+    avatarHeadChoices[0]
+  );
+
   const [clothingColor, setClothingColor] = useState<string>("#8fa7df");
+  const [headContrastColor, setHeadContrastColor] = useState<string>("#2c1b18");
   const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
   const [facialHairEnabled, setFacialHairEnabled] = useState(true);
 
@@ -123,7 +134,9 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
       face: [selectedFace],
       facialHair: [selectedFacialHair],
       facialHairProbability,
+      head: [selectedHead],
       clothingColor: [clothingColor],
+      headContrastColor: [headContrastColor],
     }).toDataUri();
   }, [
     selectedAccessories,
@@ -131,7 +144,9 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     selectedFace,
     selectedFacialHair,
     facialHairProbability,
+    selectedHead,
     clothingColor,
+    headContrastColor,
   ]);
 
   return (
@@ -141,15 +156,19 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         setSelectedAccessories,
         setSelectedFace,
         setSelectedFacialHair,
+        setSelectedHead,
         setAccessoriesEnabled,
         setFacialHairEnabled,
         setClothingColor,
+        setHeadContrastColor,
         avatarAccessoriesChoices,
         avatarFaceChoices,
         avatarFacialHairChoices,
+        avatarHeadChoices,
         accessoriesEnabled,
         facialHairEnabled,
         clothingColor,
+        headContrastColor,
       }}
     >
       {children}
