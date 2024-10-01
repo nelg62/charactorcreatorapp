@@ -1,20 +1,21 @@
 "use client";
+import { openPeeps } from "@dicebear/collection";
+import { createAvatar } from "@dicebear/core";
+import { JSONSchema7 } from "json-schema";
 import {
   createContext,
+  Dispatch,
   SetStateAction,
   useContext,
   useMemo,
   useState,
 } from "react";
-import { JSONSchema7 } from "json-schema";
-import { openPeeps } from "@dicebear/collection";
-import { createAvatar, Options } from "@dicebear/core";
 
-// Dicebear get options
+// Helper function o retrieve options fro schema from DiceBear Characters
 export function getOptionsBySchema(schema: JSONSchema7) {
   const result: Record<string, any> = {};
 
-  for (var key in schema.properties) {
+  for (const key in schema.properties) {
     if (false === schema.properties.hasOwnProperty(key)) {
       continue;
     }
@@ -63,51 +64,51 @@ export function getOptionsBySchema(schema: JSONSchema7) {
   return result;
 }
 
+// Get avatar options
 const avatarChoices = getOptionsBySchema(openPeeps.schema);
 
-console.log("avatarChoices", avatarChoices);
-
+// Typing for avatar options
 const avatarAccessoriesChoices = avatarChoices.accessories.choices;
-type AccessoryType = typeof avatarAccessoriesChoices;
-
 const avatarFaceChoices = avatarChoices.face.choices;
-type FaceType = typeof avatarFaceChoices;
-
 const avatarFacialHairChoices = avatarChoices.facialHair.choices;
+
+type AccessoryType = typeof avatarAccessoriesChoices;
+type FaceType = typeof avatarFaceChoices;
 type FacialHairType = typeof avatarFacialHairChoices;
 
+// Avatar context type
 interface AvatarContextType {
   avatarData: string;
   setSelectedAccessories: (accessory: AccessoryType) => void;
-  setSelectedFacialHair: (facialHair: FacialHairType) => void;
-  avatarAccessoriesChoices: AccessoryType;
   setSelectedFace: (face: FaceType) => void;
+  setSelectedFacialHair: (facialHair: FacialHairType) => void;
+  setAccessoriesEnabled: Dispatch<SetStateAction<boolean>>;
+  setFacialHairEnabled: Dispatch<SetStateAction<boolean>>;
+  setClothingColor: Dispatch<SetStateAction<string>>;
+  avatarAccessoriesChoices: AccessoryType;
   avatarFaceChoices: FaceType;
-  accessoriesEnabled: Boolean;
-  facialHairEnabled: Boolean;
-  setAccessoriesEnabled: React.Dispatch<SetStateAction<boolean>>;
   avatarFacialHairChoices: FacialHairType;
-  setFacialHairEnabled: React.Dispatch<SetStateAction<boolean>>;
+  accessoriesEnabled: boolean;
+  facialHairEnabled: boolean;
   clothingColor: string;
-  setClothingColor: React.Dispatch<React.SetStateAction<string>>;
 }
 
+// Context initialization
 const AvatarContext = createContext<AvatarContextType | null>(null);
 
 export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedAccessories, setSelectedAccessories] = useState<AccessoryType>(
-    avatarAccessoriesChoices[0] as AccessoryType
+    avatarAccessoriesChoices[0]
   );
   const [selectedFace, setSelectedFace] = useState<FaceType>(
-    avatarFaceChoices[0] as FaceType
+    avatarFaceChoices[0]
   );
 
   const [selectedFacialHair, setSelectedFacialHair] = useState<FacialHairType>(
-    avatarFacialHairChoices[0] as FacialHairType
+    avatarFacialHairChoices[0]
   );
 
   const [clothingColor, setClothingColor] = useState<string>("#8fa7df");
-
   const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
   const [facialHairEnabled, setFacialHairEnabled] = useState(true);
 
@@ -138,17 +139,17 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         avatarData,
         setSelectedAccessories,
-        avatarAccessoriesChoices,
         setSelectedFace,
-        avatarFaceChoices,
-        accessoriesEnabled,
-        setAccessoriesEnabled,
         setSelectedFacialHair,
+        setAccessoriesEnabled,
         setFacialHairEnabled,
-        facialHairEnabled,
-        avatarFacialHairChoices,
-        clothingColor,
         setClothingColor,
+        avatarAccessoriesChoices,
+        avatarFaceChoices,
+        avatarFacialHairChoices,
+        accessoriesEnabled,
+        facialHairEnabled,
+        clothingColor,
       }}
     >
       {children}

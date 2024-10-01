@@ -1,32 +1,39 @@
 "use client";
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
-import { createAvatar, schema, Options } from "@dicebear/core";
+import { createAvatar } from "@dicebear/core";
 import { useMemo, useState } from "react";
 
 export default function AvatarCustomizer() {
+  // context variables
   const {
     avatarData,
     setSelectedAccessories,
     avatarAccessoriesChoices,
     setSelectedFace,
     avatarFaceChoices,
+    setSelectedFacialHair,
+    avatarFacialHairChoices,
     accessoriesEnabled,
     setAccessoriesEnabled,
-    setSelectedFacialHair,
     facialHairEnabled,
-    avatarFacialHairChoices,
     setFacialHairEnabled,
     clothingColor,
     setClothingColor,
   } = useAvatar();
+
+  // Index states
   const [accessoryIndex, setAccessoryIndex] = useState(0);
   const [faceIndex, setFaceIndex] = useState(0);
   const [facialHairIndex, setFacialHairIndex] = useState(0);
-
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
-  const buttonChoices = ["accessories", "face", "facialHair", "head"];
+  const attributeChoices =
+    {
+      accessories: avatarAccessoriesChoices,
+      face: avatarFaceChoices,
+      facialHair: avatarFacialHairChoices,
+    }[activeAttribute] || [];
 
   const updateAvatar = () => {
     if (activeAttribute === "accessories") {
@@ -42,43 +49,50 @@ export default function AvatarCustomizer() {
     }
   };
 
-  useMemo(() => {
-    updateAvatar();
-  }, [accessoryIndex, faceIndex, facialHairIndex]);
-
-  const choices =
-    {
-      accessories: avatarAccessoriesChoices,
-      face: avatarFaceChoices,
-      facialHair: avatarFacialHairChoices,
-    }[activeAttribute] || [];
+  useMemo(() => updateAvatar(), [accessoryIndex, faceIndex, facialHairIndex]);
 
   // Previous Button
   const handlePrevious = () => {
     if (activeAttribute === "accessories") {
-      setAccessoryIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+      setAccessoryIndex((prev) =>
+        prev > 0 ? prev - 1 : attributeChoices.length - 1
+      );
     } else if (activeAttribute === "face") {
-      setFaceIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+      setFaceIndex((prev) =>
+        prev > 0 ? prev - 1 : attributeChoices.length - 1
+      );
     } else if (activeAttribute === "facialHair") {
-      setFacialHairIndex((prev) => (prev > 0 ? prev - 1 : choices.length - 1));
+      setFacialHairIndex((prev) =>
+        prev > 0 ? prev - 1 : attributeChoices.length - 1
+      );
     }
   };
 
   // Next Button
   const handleNext = () => {
     if (activeAttribute === "accessories") {
-      setAccessoryIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+      setAccessoryIndex((prev) =>
+        prev < attributeChoices.length - 1 ? prev + 1 : 0
+      );
     } else if (activeAttribute === "face") {
-      setFaceIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+      setFaceIndex((prev) =>
+        prev < attributeChoices.length - 1 ? prev + 1 : 0
+      );
     } else if (activeAttribute === "facialHair") {
-      setFacialHairIndex((prev) => (prev < choices.length - 1 ? prev + 1 : 0));
+      setFacialHairIndex((prev) =>
+        prev < attributeChoices.length - 1 ? prev + 1 : 0
+      );
     }
   };
+  // // Button Choice Text
+  const buttonChoices = ["accessories", "face", "facialHair", "head"];
 
+  // toggle accessories function
   const toggleAccessories = () => {
     setAccessoriesEnabled(!accessoriesEnabled);
   };
 
+  // toggle faicial hair function
   const toggleFacialHair = () => {
     setFacialHairEnabled(!facialHairEnabled);
   };
@@ -101,28 +115,9 @@ export default function AvatarCustomizer() {
             {attribute}
           </button>
         ))}
-
-        {/* <button
-          onClick={() => setActiveAttribute("accessories")}
-          className={`btn ${activeAttribute === "accessories" ? "active" : ""}`}
-        >
-          Accessories
-        </button>
-        <button
-          onClick={() => setActiveAttribute("face")}
-          className={`btn ${activeAttribute === "face" ? "active" : ""}`}
-        >
-          Face
-        </button>
-        <button
-          onClick={() => setActiveAttribute("facialHair")}
-          className={`btn ${activeAttribute === "facialHair" ? "active" : ""}`}
-        >
-          Facial Hair
-        </button> */}
       </div>
 
-      {/* Toggle Button for Accessories*/}
+      {/* Toggle Button for Accessories and facial hair*/}
       {activeAttribute === "accessories" && (
         <div className="toggle-container">
           <button onClick={toggleAccessories} className="btn toggle-btn">
@@ -160,22 +155,25 @@ export default function AvatarCustomizer() {
 
         {/* Display preview of current attribute choice */}
         <div className="preview-display">
-          {choices.length > 0 && (
+          {attributeChoices.length > 0 && (
             <img
               src={createAvatar(openPeeps, {
                 size: 128,
                 accessories:
                   activeAttribute === "accessories" && accessoriesEnabled
-                    ? [choices[accessoryIndex]]
+                    ? [attributeChoices[accessoryIndex]]
                     : [],
                 accessoriesProbability:
                   activeAttribute === "accessories" && accessoriesEnabled
                     ? 100
                     : 0,
-                face: activeAttribute === "face" ? [choices[faceIndex]] : [],
+                face:
+                  activeAttribute === "face"
+                    ? [attributeChoices[faceIndex]]
+                    : [],
                 facialHair:
                   activeAttribute === "facialHair" && facialHairEnabled
-                    ? [choices[facialHairIndex]]
+                    ? [attributeChoices[facialHairIndex]]
                     : [],
                 facialHairProbability:
                   activeAttribute === "facialHair" && facialHairEnabled
