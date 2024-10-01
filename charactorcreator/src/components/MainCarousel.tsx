@@ -28,6 +28,8 @@ export default function AvatarCustomizer() {
     setClothingColor,
     headContrastColor,
     setHeadContrastColor,
+    backgroundColor,
+    setBackgroundColor,
   } = useAvatar();
 
   // Index states
@@ -186,6 +188,20 @@ export default function AvatarCustomizer() {
         </div>
       </div>
 
+      <div className="color-pickers">
+        <div>
+          <label htmlFor="backgroundcolor">Background Color: </label>
+          <input
+            type="color"
+            id="backgroundcolor"
+            value={`#${backgroundColor}`}
+            onChange={(e) =>
+              setBackgroundColor(e.target.value.replace("#", ""))
+            }
+          />
+        </div>
+      </div>
+
       <div className="preview-container">
         {/* Previous button */}
         <button onClick={() => handleNavigation("previous")} className="btn">
@@ -230,6 +246,7 @@ export default function AvatarCustomizer() {
                   activeAttribute === "mask" && maskEnabled ? 100 : 0,
                 clothingColor: [clothingColor],
                 headContrastColor: [headContrastColor],
+                backgroundColor: [backgroundColor],
               }).toDataUri()}
               alt={`Preview ${activeAttribute} option`}
             />
