@@ -72,18 +72,17 @@ export default function AvatarCustomizer() {
     }
   };
 
+  // General toggle function
+  const toggleAttribute = (attribute: "accessories" | "facialHair") => {
+    const toggles = {
+      accessories: () => setAccessoriesEnabled(!accessoriesEnabled),
+      facialHair: () => setFacialHairEnabled(!facialHairEnabled),
+    };
+    toggles[attribute]?.();
+  };
+
   // // Button Choice Text
   const buttonChoices = ["accessories", "face", "facialHair", "head"];
-
-  // toggle accessories function
-  const toggleAccessories = () => {
-    setAccessoriesEnabled(!accessoriesEnabled);
-  };
-
-  // toggle faicial hair function
-  const toggleFacialHair = () => {
-    setFacialHairEnabled(!facialHairEnabled);
-  };
 
   return (
     <div className="avatar-customizer">
@@ -106,17 +105,22 @@ export default function AvatarCustomizer() {
       </div>
 
       {/* Toggle Button for Accessories and facial hair*/}
-      {activeAttribute === "accessories" && (
+      {(activeAttribute === "accessories" ||
+        activeAttribute === "facialHair") && (
         <div className="toggle-container">
-          <button onClick={toggleAccessories} className="btn toggle-btn">
-            {accessoriesEnabled ? "Disable Accessories" : "Enable Accessories"}
-          </button>
-        </div>
-      )}
-      {activeAttribute === "facialHair" && (
-        <div className="toggle-container">
-          <button onClick={toggleFacialHair} className="btn toggle-btn">
-            {facialHairEnabled ? "Disable Facial Hair" : "Enable Facial Hair"}
+          <button
+            onClick={() =>
+              toggleAttribute(activeAttribute as "accessories" | "facialHair")
+            }
+            className="btn toggle-btn"
+          >
+            {activeAttribute === "accessories"
+              ? accessoriesEnabled
+                ? "Disable Accessories"
+                : "Enable Accessories"
+              : facialHairEnabled
+              ? "Disable Facial Hair"
+              : "Enable Facial Hair"}
           </button>
         </div>
       )}
