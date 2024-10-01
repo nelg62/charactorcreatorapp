@@ -51,39 +51,27 @@ export default function AvatarCustomizer() {
 
   useMemo(() => updateAvatar(), [accessoryIndex, faceIndex, facialHairIndex]);
 
-  // Previous Button
-  const handlePrevious = () => {
-    if (activeAttribute === "accessories") {
-      setAccessoryIndex((prev) =>
-        prev > 0 ? prev - 1 : attributeChoices.length - 1
-      );
-    } else if (activeAttribute === "face") {
-      setFaceIndex((prev) =>
-        prev > 0 ? prev - 1 : attributeChoices.length - 1
-      );
-    } else if (activeAttribute === "facialHair") {
-      setFacialHairIndex((prev) =>
-        prev > 0 ? prev - 1 : attributeChoices.length - 1
+  // Generalized Navigation fuunction
+  const handleNavigation = (direction: "next" | "previous") => {
+    const indexSetters = {
+      accessories: setAccessoryIndex,
+      face: setFaceIndex,
+      facialHair: setFacialHairIndex,
+    };
+
+    const currentSetter = indexSetters[activeAttribute];
+
+    if (currentSetter) {
+      currentSetter((prev: number) =>
+        direction === "next"
+          ? (prev + 1) % attributeChoices.length
+          : prev === 0
+          ? attributeChoices.length - 1
+          : prev - 1
       );
     }
   };
 
-  // Next Button
-  const handleNext = () => {
-    if (activeAttribute === "accessories") {
-      setAccessoryIndex((prev) =>
-        prev < attributeChoices.length - 1 ? prev + 1 : 0
-      );
-    } else if (activeAttribute === "face") {
-      setFaceIndex((prev) =>
-        prev < attributeChoices.length - 1 ? prev + 1 : 0
-      );
-    } else if (activeAttribute === "facialHair") {
-      setFacialHairIndex((prev) =>
-        prev < attributeChoices.length - 1 ? prev + 1 : 0
-      );
-    }
-  };
   // // Button Choice Text
   const buttonChoices = ["accessories", "face", "facialHair", "head"];
 
@@ -149,7 +137,7 @@ export default function AvatarCustomizer() {
 
       <div className="preview-container">
         {/* Previous button */}
-        <button onClick={handlePrevious} className="btn">
+        <button onClick={() => handleNavigation("previous")} className="btn">
           Previous
         </button>
 
@@ -187,7 +175,7 @@ export default function AvatarCustomizer() {
         </div>
 
         {/* Next Button */}
-        <button onClick={handleNext} className="btn">
+        <button onClick={() => handleNavigation("next")} className="btn">
           Next
         </button>
       </div>
