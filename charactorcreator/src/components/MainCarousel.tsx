@@ -26,6 +26,8 @@ export default function AvatarCustomizer() {
 
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
+  const buttonChoices = ["accessories", "face", "facialHair", "head"];
+
   const updateAvatar = () => {
     if (activeAttribute === "accessories") {
       setSelectedAccessories(
@@ -90,7 +92,17 @@ export default function AvatarCustomizer() {
 
       {/* Attribute Selector */}
       <div className="attribure-selector">
-        <button
+        {buttonChoices.map((attribute) => (
+          <button
+            key={attribute}
+            onClick={() => setActiveAttribute(attribute)}
+            className={`btn ${activeAttribute === attribute ? "active" : ""}`}
+          >
+            {attribute}
+          </button>
+        ))}
+
+        {/* <button
           onClick={() => setActiveAttribute("accessories")}
           className={`btn ${activeAttribute === "accessories" ? "active" : ""}`}
         >
@@ -107,7 +119,7 @@ export default function AvatarCustomizer() {
           className={`btn ${activeAttribute === "facialHair" ? "active" : ""}`}
         >
           Facial Hair
-        </button>
+        </button> */}
       </div>
 
       {/* Toggle Button for Accessories*/}
