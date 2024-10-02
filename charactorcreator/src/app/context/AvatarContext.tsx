@@ -154,6 +154,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedFacialHair(getRandomItem(avatarFacialHairChoices));
     setSelectedHead(getRandomItem(avatarHeadChoices));
     setSelectedMask(getRandomItem(avatarMaskChoices));
+
+    setAccessoriesEnabled(Math.random() < 0.5);
+    setFacialHairEnabled(Math.random() < 0.5);
+    setMaskEnabled(Math.random() < 0.5);
     setClothingColor(Math.random().toString(16).substr(-6));
     setHeadContrastColor(Math.random().toString(16).substr(-6));
     setBackgroundColor(Math.random().toString(16).substr(-6));
