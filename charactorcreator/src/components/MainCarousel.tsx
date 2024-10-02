@@ -55,7 +55,8 @@ export default function AvatarCustomizer() {
     }[activeAttribute] || [];
 
   const updateAvatar = () => {
-    const currentIndex = attributeIndexes[activeAttribute];
+    const currentIndex =
+      attributeIndexes[activeAttribute as keyof typeof attributeIndexes];
 
     if (activeAttribute === "accessories") {
       setSelectedAccessories(
@@ -82,7 +83,8 @@ export default function AvatarCustomizer() {
   // Generalized Navigation fuunction
   const handleNavigation = (direction: "next" | "previous") => {
     setAttributeIndexes((prevIndexes) => {
-      const currentIndex = prevIndexes[activeAttribute];
+      const currentIndex =
+        prevIndexes[activeAttribute as keyof typeof prevIndexes];
       const totalChoices = attributeChoices.length;
 
       const newIndex =
