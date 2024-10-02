@@ -2,7 +2,7 @@
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { useMemo, useState } from "react";
+import { SetStateAction, useMemo, useState } from "react";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -35,11 +35,11 @@ export default function AvatarCustomizer() {
   } = useAvatar();
 
   // Index states
-  const [accessoryIndex, setAccessoryIndex] = useState(0);
-  const [faceIndex, setFaceIndex] = useState(0);
-  const [facialHairIndex, setFacialHairIndex] = useState(0);
-  const [headIndex, setHeadIndex] = useState(0);
-  const [maskIndex, setMaskIndex] = useState(0);
+  const [accessoryIndex, setAccessoryIndex] = useState<number>(0);
+  const [faceIndex, setFaceIndex] = useState<number>(0);
+  const [facialHairIndex, setFacialHairIndex] = useState<number>(0);
+  const [headIndex, setHeadIndex] = useState<number>(0);
+  const [maskIndex, setMaskIndex] = useState<number>(0);
   const [activeAttribute, setActiveAttribute] = useState("accessories");
 
   const attributeChoices =

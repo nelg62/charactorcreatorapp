@@ -11,34 +11,31 @@ import {
   useState,
 } from "react";
 
-type AvatarOption = {
-  type: string;
-  choices?: string[];
-  description?: string;
-};
-
 // Helper function o retrieve options fro schema from DiceBear Characters
-export function getOptionsBySchema(
-  schema: JSONSchema7
-): Record<string, AvatarOption> {
-  const result: Record<string, AvatarOption> = {};
+export function getOptionsBySchema(schema: JSONSchema7) {
+  const result: Record<string, any> = {};
 
   for (const key in schema.properties) {
-    if (!schema.properties.hasOwnProperty(key)) {
+    if (false === schema.properties.hasOwnProperty(key)) {
       continue;
     }
 
     const property = schema.properties[key];
 
     if (typeof property === "object") {
-      const option: AvatarOption = { type: property.type as string };
-      if (option.type === "integer") option.type = "number";
+      const option: Record<string, any> = {
+        type: property.type,
+      };
+
+      if (option.type === "integer") {
+        option.type = "number";
+      }
 
       option.choices = [];
 
       if (property.enum) {
         option.choices.push(
-          ...(property.enum.filter((v) => typeof v === "string") as string[])
+          ...property.enum.filter((v) => typeof v === "string")
         );
       }
 
@@ -48,13 +45,13 @@ export function getOptionsBySchema(
         property.items.enum
       ) {
         option.choices.push(
-          ...(property.items.enum.filter(
-            (v) => typeof v === "string"
-          ) as string[])
+          ...property.items.enum.filter((v) => typeof v === "string")
         );
       }
 
-      if (option.choices.length === 0) delete option.choices;
+      if (option.choices.length === 0) {
+        delete option.choices;
+      }
 
       if (property.description) {
         option.description = property.description;

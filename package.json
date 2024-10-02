@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@dicebear/converter": "^9.2.2"
+  }
+}
