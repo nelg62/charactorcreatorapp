@@ -40,7 +40,7 @@ export default function AvatarCustomizer() {
   const [facialHairIndex, setFacialHairIndex] = useState<number>(0);
   const [headIndex, setHeadIndex] = useState<number>(0);
   const [maskIndex, setMaskIndex] = useState<number>(0);
-  const [activeAttribute, setActiveAttribute] = useState("accessories");
+  const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
 
   const attributeChoices =
     {
@@ -84,7 +84,8 @@ export default function AvatarCustomizer() {
       mask: setMaskIndex,
     };
 
-    const currentSetter = indexSetters[activeAttribute];
+    const currentSetter =
+      indexSetters[activeAttribute as keyof typeof indexSetters];
 
     if (currentSetter) {
       currentSetter((prev: number) =>
