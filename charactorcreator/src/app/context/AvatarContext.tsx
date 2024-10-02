@@ -182,13 +182,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     }).toDataUri();
   }, [
     selectedAccessories,
-    accessoriesEnabled,
     selectedFace,
     selectedFacialHair,
-    facialHairEnabled,
     selectedHead,
     selectedMask,
-    maskEnabled,
     clothingColor,
     headContrastColor,
     backgroundColor,
