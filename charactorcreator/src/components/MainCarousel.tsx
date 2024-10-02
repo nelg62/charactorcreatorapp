@@ -36,6 +36,18 @@ export default function AvatarCustomizer() {
     setSkinColor,
   } = useAvatar();
 
+  const getRandomColor = () => {
+    return Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, "0");
+  };
+
+  const randomizeClothingColor = () => setClothingColor(getRandomColor());
+  const randomizeHeadContrastColor = () =>
+    setHeadContrastColor(getRandomColor());
+  const randomizeBackgroundColor = () => setBackgroundColor(getRandomColor());
+  const randomizeSkinColor = () => setSkinColor(getRandomColor());
+
   const [attributeIndexes, setAttributeIndexes] = useState({
     accessories: 0,
     face: 0,
@@ -198,24 +210,28 @@ export default function AvatarCustomizer() {
           label="Clothing Color"
           color={clothingColor}
           setColor={setClothingColor}
+          randomizeColor={randomizeClothingColor}
         />
         {/* Head contrast Color */}
         <ColorPicker
           label="Head Contrast Color"
           color={headContrastColor}
           setColor={setHeadContrastColor}
+          randomizeColor={randomizeHeadContrastColor}
         />
         {/* Background Color */}
         <ColorPicker
           label="Background Color"
           color={backgroundColor}
           setColor={setBackgroundColor}
+          randomizeColor={randomizeBackgroundColor}
         />
         {/* Skin Color */}
         <ColorPicker
           label="Skin Color"
           color={skinColor}
           setColor={setSkinColor}
+          randomizeColor={randomizeSkinColor}
         />
       </div>
 
