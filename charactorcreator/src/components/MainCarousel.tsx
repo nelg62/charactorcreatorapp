@@ -9,6 +9,7 @@ export default function AvatarCustomizer() {
   // context variables
   const {
     avatarData,
+    randomizeAvatar,
     setSelectedAccessories,
     avatarAccessoriesChoices,
     setSelectedFace,
@@ -134,6 +135,13 @@ export default function AvatarCustomizer() {
             {attribute}
           </button>
         ))}
+      </div>
+
+      {/* Randomize All Button */}
+      <div className="randomize-container">
+        <button onClick={randomizeAvatar} className="btn randomize-btn">
+          Randomize All
+        </button>
       </div>
 
       {/* Toggle Button for Accessories and facial hair*/}

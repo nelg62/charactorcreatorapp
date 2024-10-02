@@ -85,6 +85,7 @@ type MaskType = typeof avatarMaskChoices;
 // Avatar context type
 interface AvatarContextType {
   avatarData: string;
+  randomizeAvatar: () => void;
   setSelectedAccessories: (accessory: AccessoryType) => void;
   setSelectedFace: (face: FaceType) => void;
   setSelectedFacialHair: (facialHair: FacialHairType) => void;
@@ -114,6 +115,11 @@ interface AvatarContextType {
 // Context initialization
 const AvatarContext = createContext<AvatarContextType | null>(null);
 
+function getRandomItem<T>(items: T[]): T {
+  const randomIndex = Math.floor(Math.random() * items.length);
+  return items[randomIndex];
+}
+
 export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedAccessories, setSelectedAccessories] = useState<AccessoryType>(
     avatarAccessoriesChoices[0]
@@ -142,21 +148,31 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [facialHairEnabled, setFacialHairEnabled] = useState(true);
   const [maskEnabled, setMaskEnabled] = useState(false);
 
-  const accessoriesProbability = accessoriesEnabled ? 100 : 0;
-  const facialHairProbability = facialHairEnabled ? 100 : 0;
-  const maskProbability = maskEnabled ? 100 : 0;
+  const randomizeAvatar = () => {
+    setSelectedAccessories(getRandomItem(avatarAccessoriesChoices));
+    setSelectedFace(getRandomItem(avatarFaceChoices));
+    setSelectedFacialHair(getRandomItem(avatarFacialHairChoices));
+    setSelectedHead(getRandomItem(avatarHeadChoices));
+    setSelectedMask(getRandomItem(avatarMaskChoices));
+    setClothingColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
+    setHeadContrastColor(
+      `${Math.floor(Math.random() * 16777215).toString(16)}`
+    );
+    setBackgroundColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
+    setSkinColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
+  };
 
   const avatarData = useMemo(() => {
     return createAvatar(openPeeps, {
       size: 128,
       accessories: [selectedAccessories],
-      accessoriesProbability,
+      accessoriesProbability: accessoriesEnabled ? 100 : 0,
       face: [selectedFace],
       facialHair: [selectedFacialHair],
-      facialHairProbability,
+      facialHairProbability: facialHairEnabled ? 100 : 0,
       head: [selectedHead],
       mask: [selectedMask],
-      maskProbability,
+      maskProbability: maskEnabled ? 100 : 0,
       clothingColor: [clothingColor],
       headContrastColor: [headContrastColor],
       backgroundColor: [backgroundColor],
@@ -164,13 +180,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     }).toDataUri();
   }, [
     selectedAccessories,
-    accessoriesProbability,
     selectedFace,
     selectedFacialHair,
-    facialHairProbability,
     selectedHead,
     selectedMask,
-    maskProbability,
     clothingColor,
     headContrastColor,
     backgroundColor,
@@ -205,6 +218,7 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
         headContrastColor,
         backgroundColor,
         skinColor,
+        randomizeAvatar,
       }}
     >
       {children}
