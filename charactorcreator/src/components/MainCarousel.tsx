@@ -81,6 +81,17 @@ export default function AvatarCustomizer() {
     [attributeIndexes, accessoriesEnabled, facialHairEnabled, maskEnabled]
   );
 
+  const randomizeSelection = () => {
+    const totalChoices = attributeChoices.length;
+    if (totalChoices > 0) {
+      const randomIndex = Math.floor(Math.random() * totalChoices);
+      setAttributeIndexes((prevIndexes) => ({
+        ...prevIndexes,
+        [activeAttribute]: randomIndex,
+      }));
+    }
+  };
+
   // Generalized Navigation fuunction
   const handleNavigation = (direction: "next" | "previous") => {
     setAttributeIndexes((prevIndexes) => {
@@ -137,8 +148,13 @@ export default function AvatarCustomizer() {
         ))}
       </div>
 
-      {/* Randomize All Button */}
       <div className="randomize-container">
+        {/* Randomize selected Button */}
+        <button onClick={randomizeSelection} className="btn randomize-btn">
+          Randomize {activeAttribute}
+        </button>
+
+        {/* Randomize All Button */}
         <button onClick={randomizeAvatar} className="btn randomize-btn">
           Randomize All
         </button>
