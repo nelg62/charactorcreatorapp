@@ -35,12 +35,14 @@ export default function AvatarCustomizer() {
     setSkinColor,
   } = useAvatar();
 
-  // Index states
-  const [accessoryIndex, setAccessoryIndex] = useState<number>(0);
-  const [faceIndex, setFaceIndex] = useState<number>(0);
-  const [facialHairIndex, setFacialHairIndex] = useState<number>(0);
-  const [headIndex, setHeadIndex] = useState<number>(0);
-  const [maskIndex, setMaskIndex] = useState<number>(0);
+  const [attributeIndexes, setAttributeIndexes] = useState({
+    accessories: 0,
+    face: 0,
+    facialHair: 0,
+    head: 0,
+    mask: 0,
+  });
+
   const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
 
   const attributeChoices =
@@ -53,50 +55,48 @@ export default function AvatarCustomizer() {
     }[activeAttribute] || [];
 
   const updateAvatar = () => {
+    const currentIndex = attributeIndexes[activeAttribute];
+
     if (activeAttribute === "accessories") {
       setSelectedAccessories(
-        accessoriesEnabled ? avatarAccessoriesChoices[accessoryIndex] : ""
+        accessoriesEnabled ? avatarAccessoriesChoices[currentIndex] : ""
       );
     } else if (activeAttribute === "face") {
-      setSelectedFace(avatarFaceChoices[faceIndex]);
+      setSelectedFace(avatarFaceChoices[currentIndex]);
     } else if (activeAttribute === "facialHair") {
       setSelectedFacialHair(
-        facialHairEnabled ? avatarFacialHairChoices[facialHairIndex] : ""
+        facialHairEnabled ? avatarFacialHairChoices[currentIndex] : ""
       );
     } else if (activeAttribute === "head") {
-      setSelectedHead(avatarHeadChoices[headIndex]);
+      setSelectedHead(avatarHeadChoices[currentIndex]);
     } else if (activeAttribute === "mask") {
-      setSelectedMask(maskEnabled ? avatarMaskChoices[maskIndex] : "");
+      setSelectedMask(maskEnabled ? avatarMaskChoices[currentIndex] : "");
     }
   };
 
   useMemo(
     () => updateAvatar(),
-    [accessoryIndex, faceIndex, facialHairIndex, headIndex, maskIndex]
+    [attributeIndexes, accessoriesEnabled, facialHairEnabled, maskEnabled]
   );
 
   // Generalized Navigation fuunction
   const handleNavigation = (direction: "next" | "previous") => {
-    const indexSetters = {
-      accessories: setAccessoryIndex,
-      face: setFaceIndex,
-      facialHair: setFacialHairIndex,
-      head: setHeadIndex,
-      mask: setMaskIndex,
-    };
+    setAttributeIndexes((prevIndexes) => {
+      const currentIndex = prevIndexes[activeAttribute];
+      const totalChoices = attributeChoices.length;
 
-    const currentSetter =
-      indexSetters[activeAttribute as keyof typeof indexSetters];
-
-    if (currentSetter) {
-      currentSetter((prev: number) =>
+      const newIndex =
         direction === "next"
-          ? (prev + 1) % attributeChoices.length
-          : prev === 0
-          ? attributeChoices.length - 1
-          : prev - 1
-      );
-    }
+          ? (currentIndex + 1) % totalChoices
+          : currentIndex === 0
+          ? totalChoices - 1
+          : currentIndex - 1;
+
+      return {
+        ...prevIndexes,
+        [activeAttribute]: newIndex,
+      };
+    });
   };
 
   // General toggle function
@@ -207,7 +207,7 @@ export default function AvatarCustomizer() {
                 size: 128,
                 accessories:
                   activeAttribute === "accessories" && accessoriesEnabled
-                    ? [attributeChoices[accessoryIndex]]
+                    ? [attributeChoices[attributeIndexes.accessories]]
                     : [],
                 accessoriesProbability:
                   activeAttribute === "accessories" && accessoriesEnabled
@@ -215,11 +215,11 @@ export default function AvatarCustomizer() {
                     : 0,
                 face:
                   activeAttribute === "face"
-                    ? [attributeChoices[faceIndex]]
+                    ? [attributeChoices[attributeIndexes.face]]
                     : [],
                 facialHair:
                   activeAttribute === "facialHair" && facialHairEnabled
-                    ? [attributeChoices[facialHairIndex]]
+                    ? [attributeChoices[attributeIndexes.facialHair]]
                     : [],
                 facialHairProbability:
                   activeAttribute === "facialHair" && facialHairEnabled
@@ -227,11 +227,11 @@ export default function AvatarCustomizer() {
                     : 0,
                 head:
                   activeAttribute === "head"
-                    ? [attributeChoices[headIndex]]
+                    ? [attributeChoices[attributeIndexes.head]]
                     : [],
                 mask:
                   activeAttribute === "mask" && maskEnabled
-                    ? [attributeChoices[maskIndex]]
+                    ? [attributeChoices[attributeIndexes.mask]]
                     : [],
                 maskProbability:
                   activeAttribute === "mask" && maskEnabled ? 100 : 0,
@@ -242,6 +242,15 @@ export default function AvatarCustomizer() {
               alt={`Preview ${activeAttribute} option`}
             />
           )}
+          <h1 className="text-center">
+            {
+              attributeChoices[
+                attributeIndexes[
+                  activeAttribute as keyof typeof attributeIndexes
+                ]
+              ]
+            }
+          </h1>
         </div>
 
         {/* Next Button */}
