@@ -3,6 +3,7 @@ import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
 import { SetStateAction, useMemo, useState } from "react";
+import ColorPicker from "./ColorPicker";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -166,55 +167,30 @@ export default function AvatarCustomizer() {
       {/* Choose Colors */}
 
       <div className="color-pickers">
-        <div>
-          <label htmlFor="clothingcolor">Clothing Color: </label>
-          <input
-            type="color"
-            id="clothingcolor"
-            value={`#${clothingColor}`}
-            onChange={(e) => setClothingColor(e.target.value.replace("#", ""))}
-          />
-        </div>
-      </div>
-
-      <div className="color-pickers">
-        <div>
-          <label htmlFor="headcontrastcolor">Head Contrast Color: </label>
-          <input
-            type="color"
-            id="headcontrastcolor"
-            value={`#${headContrastColor}`}
-            onChange={(e) =>
-              setHeadContrastColor(e.target.value.replace("#", ""))
-            }
-          />
-        </div>
-      </div>
-
-      <div className="color-pickers">
-        <div>
-          <label htmlFor="backgroundcolor">Background Color: </label>
-          <input
-            type="color"
-            id="backgroundcolor"
-            value={`#${backgroundColor}`}
-            onChange={(e) =>
-              setBackgroundColor(e.target.value.replace("#", ""))
-            }
-          />
-        </div>
-      </div>
-
-      <div className="color-pickers">
-        <div>
-          <label htmlFor="skincolor">Skin Color: </label>
-          <input
-            type="color"
-            id="skincolor"
-            value={`#${skinColor}`}
-            onChange={(e) => setSkinColor(e.target.value.replace("#", ""))}
-          />
-        </div>
+        {/* Clothing Color */}
+        <ColorPicker
+          label="Clothing Color"
+          color={clothingColor}
+          setColor={setClothingColor}
+        />
+        {/* Head contrast Color */}
+        <ColorPicker
+          label="Head Contrast Color"
+          color={headContrastColor}
+          setColor={setHeadContrastColor}
+        />
+        {/* Background Color */}
+        <ColorPicker
+          label="Background Color"
+          color={backgroundColor}
+          setColor={setBackgroundColor}
+        />
+        {/* Skin Color */}
+        <ColorPicker
+          label="Skin Color"
+          color={skinColor}
+          setColor={setSkinColor}
+        />
       </div>
 
       <div className="preview-container">
