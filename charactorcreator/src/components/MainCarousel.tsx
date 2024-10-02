@@ -2,7 +2,7 @@
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { SetStateAction, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ColorPicker from "./ColorPicker";
 
 export default function AvatarCustomizer() {
@@ -67,7 +67,8 @@ export default function AvatarCustomizer() {
       mask: avatarMaskChoices,
     }[activeAttribute] || [];
 
-  const updateAvatar = () => {
+  // Update Avatar
+  useEffect(() => {
     const currentIndex =
       attributeIndexes[activeAttribute as keyof typeof attributeIndexes];
 
@@ -86,12 +87,23 @@ export default function AvatarCustomizer() {
     } else if (activeAttribute === "mask") {
       setSelectedMask(maskEnabled ? avatarMaskChoices[currentIndex] : "");
     }
-  };
-
-  useMemo(
-    () => updateAvatar(),
-    [attributeIndexes, accessoriesEnabled, facialHairEnabled, maskEnabled]
-  );
+  }, [
+    attributeIndexes,
+    activeAttribute,
+    accessoriesEnabled,
+    facialHairEnabled,
+    maskEnabled,
+    setSelectedAccessories,
+    avatarAccessoriesChoices,
+    setSelectedFace,
+    avatarFaceChoices,
+    setSelectedFacialHair,
+    avatarFacialHairChoices,
+    setSelectedHead,
+    avatarHeadChoices,
+    setSelectedMask,
+    avatarMaskChoices,
+  ]);
 
   const randomizeSelection = () => {
     const totalChoices = attributeChoices.length;
