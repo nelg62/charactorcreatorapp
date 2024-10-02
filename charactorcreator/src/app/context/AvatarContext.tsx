@@ -154,12 +154,10 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedFacialHair(getRandomItem(avatarFacialHairChoices));
     setSelectedHead(getRandomItem(avatarHeadChoices));
     setSelectedMask(getRandomItem(avatarMaskChoices));
-    setClothingColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
-    setHeadContrastColor(
-      `${Math.floor(Math.random() * 16777215).toString(16)}`
-    );
-    setBackgroundColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
-    setSkinColor(`${Math.floor(Math.random() * 16777215).toString(16)}`);
+    setClothingColor(Math.random().toString(16).substr(-6));
+    setHeadContrastColor(Math.random().toString(16).substr(-6));
+    setBackgroundColor(Math.random().toString(16).substr(-6));
+    setSkinColor(Math.random().toString(16).substr(-6));
   };
 
   const avatarData = useMemo(() => {
