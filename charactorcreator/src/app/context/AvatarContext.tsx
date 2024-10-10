@@ -1,12 +1,13 @@
 "use client";
 
 import { openPeeps } from "@dicebear/collection";
-import { schema } from "@dicebear/core";
-import React, { createContext, useContext } from "react";
+import { createAvatar, schema, StyleOptions } from "@dicebear/core";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { JSONSchema7Definition } from "json-schema";
 
 interface AvatarContextType {
   extractedEnums: Record<string, string[]>;
+  avatarData: string;
 }
 
 const AvatarContext = createContext<AvatarContextType | null>(null);
@@ -40,8 +41,27 @@ const extractedEnums = extractEnumsFromOptions(options);
 console.log("Extracted Enums:", extractedEnums);
 
 export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
+  const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
+
+  const getAvatarOptions = (
+    extractedEnums: Record<string, string[]>
+  ): StyleOptions<openPeeps.Options> => {
+    const firstAccessories = extractedEnums.accessories[1];
+
+    return {
+      size: 128,
+      accessories: [firstAccessories] as openPeeps.Options["accessories"],
+      accessoriesProbability: accessoriesEnabled ? 100 : 0,
+    };
+  };
+
+  const avatarData = useMemo(() => {
+    const avatarOptions = getAvatarOptions(extractedEnums);
+
+    return createAvatar(openPeeps, avatarOptions).toDataUri();
+  }, []);
   return (
-    <AvatarContext.Provider value={{ extractedEnums }}>
+    <AvatarContext.Provider value={{ extractedEnums, avatarData }}>
       {children}
     </AvatarContext.Provider>
   );
