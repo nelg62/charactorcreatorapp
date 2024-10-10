@@ -9,6 +9,13 @@ import { useState } from "react";
 export default function AvatarCustomizer() {
   const { extractedEnums, avatarData } = useAvatar();
   const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
+  const [attributeIndexes, setAttributeIndexes] = useState({
+    accessories: 0,
+    face: 0,
+    facialHair: 0,
+    head: 0,
+    mask: 0,
+  });
 
   const attributeChoices =
     {
@@ -18,6 +25,26 @@ export default function AvatarCustomizer() {
       head: extractedEnums.head,
       mask: extractedEnums.mask,
     }[activeAttribute] || [];
+
+  const handleNavigation = (direction: "next" | "previous") => {
+    setAttributeIndexes((prevIndexes) => {
+      const currentIndex =
+        prevIndexes[activeAttribute as keyof typeof prevIndexes];
+      const totalChoices = attributeChoices.length;
+
+      const newIndex =
+        direction === "next"
+          ? (currentIndex + 1) % totalChoices
+          : currentIndex === 0
+          ? totalChoices - 1
+          : currentIndex - 1;
+
+      return {
+        ...prevIndexes,
+        [activeAttribute]: newIndex,
+      };
+    });
+  };
 
   // Button Choice Text
   const buttonChoices = ["accessories", "face", "facialHair", "head", "mask"];
@@ -41,18 +68,29 @@ export default function AvatarCustomizer() {
         ))}
       </div>
 
-      {/* Display preview of current attribute choice */}
-      <div className="preview-display">
-        {attributeChoices.length > 0 && (
-          <Image
-            src={createAvatar(openPeeps, {
-              size: 128,
-            }).toDataUri()}
-            alt="Avatar Item Preview"
-            height={128}
-            width={128}
-          />
-        )}
+      <div className="preview-container">
+        {/* Previous button*/}
+        <button onClick={() => handleNavigation("previous")} className="btn">
+          Previous
+        </button>
+        {/* Display preview of current attribute choice */}
+        <div className="preview-display">
+          {attributeChoices.length > 0 && (
+            <Image
+              src={createAvatar(openPeeps, {
+                size: 128,
+              }).toDataUri()}
+              alt="Avatar Item Preview"
+              height={128}
+              width={128}
+            />
+          )}
+        </div>
+
+        {/* Next Button */}
+        <button onClick={() => handleNavigation("next")} className="btn">
+          Next
+        </button>
       </div>
       <p>{extractedEnums.accessories[0]}</p>
     </div>
