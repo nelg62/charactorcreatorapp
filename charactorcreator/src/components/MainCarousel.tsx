@@ -2,12 +2,12 @@
 
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
+import { createAvatar, StyleOptions } from "@dicebear/core";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function AvatarCustomizer() {
-  const { extractedEnums, avatarData } = useAvatar();
+  const { extractedEnums, avatarData, accessoriesEnabled } = useAvatar();
   const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
   const [attributeIndexes, setAttributeIndexes] = useState({
     accessories: 0,
@@ -46,6 +46,25 @@ export default function AvatarCustomizer() {
     });
   };
 
+  const avatarDataPreview = useMemo(() => {
+    const getAvatarOptions = (
+      extractedEnums: Record<string, string[]>
+    ): StyleOptions<openPeeps.Options> => {
+      const selectedAccessoryIndex = attributeIndexes.accessories;
+      const selectedAccessory =
+        extractedEnums.accessories[selectedAccessoryIndex];
+
+      return {
+        size: 128,
+        accessories: [selectedAccessory] as openPeeps.Options["accessories"],
+        accessoriesProbability: accessoriesEnabled ? 100 : 0,
+      };
+    };
+    const avatarOptions = getAvatarOptions(extractedEnums);
+
+    return createAvatar(openPeeps, avatarOptions).toDataUri();
+  }, [attributeIndexes, accessoriesEnabled, extractedEnums]);
+
   // Button Choice Text
   const buttonChoices = ["accessories", "face", "facialHair", "head", "mask"];
   return (
@@ -77,9 +96,7 @@ export default function AvatarCustomizer() {
         <div className="preview-display">
           {attributeChoices.length > 0 && (
             <Image
-              src={createAvatar(openPeeps, {
-                size: 128,
-              }).toDataUri()}
+              src={avatarDataPreview}
               alt="Avatar Item Preview"
               height={128}
               width={128}

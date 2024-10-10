@@ -8,6 +8,7 @@ import { JSONSchema7Definition } from "json-schema";
 interface AvatarContextType {
   extractedEnums: Record<string, string[]>;
   avatarData: string;
+  accessoriesEnabled: boolean;
 }
 
 const AvatarContext = createContext<AvatarContextType | null>(null);
@@ -61,7 +62,9 @@ export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
     return createAvatar(openPeeps, avatarOptions).toDataUri();
   }, []);
   return (
-    <AvatarContext.Provider value={{ extractedEnums, avatarData }}>
+    <AvatarContext.Provider
+      value={{ extractedEnums, avatarData, accessoriesEnabled }}
+    >
       {children}
     </AvatarContext.Provider>
   );
