@@ -1,21 +1,27 @@
 "use client";
-
 import { openPeeps } from "@dicebear/collection";
-import { createAvatar, schema, StyleOptions } from "@dicebear/core";
-import React, { createContext, useContext, useMemo, useState } from "react";
+import { schema as dicebearSchema, StyleOptions } from "@dicebear/core";
+import { createContext, useContext, useMemo, useState } from "react";
 import { JSONSchema7Definition } from "json-schema";
 
-interface AvatarContextType {
-  extractedEnums: Record<string, string[]>;
-  avatarData: string;
-  accessoriesEnabled: boolean;
-}
+export interface OpenPeepsOptions
+  extends Omit<
+      (typeof dicebearSchema)["properties"],
+      keyof StyleOptions<openPeeps.Options>
+    >,
+    StyleOptions<openPeeps.Options> {}
 
-const AvatarContext = createContext<AvatarContextType | null>(null);
-const options = {
-  ...schema.properties,
-  ...openPeeps.schema.properties,
+export type CombinedOptions = (typeof dicebearSchema)["properties"] &
+  OpenPeepsOptions;
+
+export const getCombinedOptions = (): CombinedOptions => {
+  return {
+    ...dicebearSchema.properties,
+    ...openPeeps.schema.properties,
+  } as CombinedOptions;
 };
+
+// const combinedOptions = getCombinedOptions();
 
 function isJSONSchemaObject(
   schema: JSONSchema7Definition
@@ -23,47 +29,49 @@ function isJSONSchemaObject(
   return typeof schema === "object" && schema !== null;
 }
 
+// Extract enums from combined options
 const extractEnumsFromOptions = (
-  options: Record<string, JSONSchema7Definition>
-) => {
-  const result: Record<string, string[]> = {};
-
-  Object.entries(options).forEach(([key, schema]) => {
-    if (isJSONSchemaObject(schema) && schema.items) {
-      const enumValues = schema.items.enum || [];
-      result[key] = enumValues;
-    }
-  });
-
-  return result;
+  options: CombinedOptions
+): Record<string, string[]> => {
+  return Object.entries(options).reduce<Record<string, string[]>>(
+    (result, [key, schema]) => {
+      if (isJSONSchemaObject(schema) && schema.items?.enum) {
+        result[key] = schema.items.enum;
+      }
+      return result;
+    },
+    {}
+  );
 };
 
-const extractedEnums = extractEnumsFromOptions(options);
-console.log("Extracted Enums:", extractedEnums);
+interface AvatarContextType {
+  combinedOptions: CombinedOptions;
+  extractedEnums: Record<string, string[]>;
+  accessoriesEnabled: boolean;
+  toggleAccessories: () => void;
+}
+
+const AvatarContext = createContext<AvatarContextType | null>(null);
 
 export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessoriesEnabled, setAccessoriesEnabled] = useState(true);
 
-  const getAvatarOptions = (
-    extractedEnums: Record<string, string[]>
-  ): StyleOptions<openPeeps.Options> => {
-    const firstAccessories = extractedEnums.accessories[1];
+  const combinedOptions = useMemo(() => getCombinedOptions(), []);
+  const extractedEnums = useMemo(
+    () => extractEnumsFromOptions(combinedOptions),
+    [combinedOptions]
+  );
 
-    return {
-      size: 128,
-      accessories: [firstAccessories] as openPeeps.Options["accessories"],
-      accessoriesProbability: accessoriesEnabled ? 100 : 0,
-    };
-  };
+  const toggleAccessories = () => setAccessoriesEnabled((prev) => !prev);
 
-  const avatarData = useMemo(() => {
-    const avatarOptions = getAvatarOptions(extractedEnums);
-
-    return createAvatar(openPeeps, avatarOptions).toDataUri();
-  }, []);
   return (
     <AvatarContext.Provider
-      value={{ extractedEnums, avatarData, accessoriesEnabled }}
+      value={{
+        combinedOptions,
+        extractedEnums,
+        accessoriesEnabled,
+        toggleAccessories,
+      }}
     >
       {children}
     </AvatarContext.Provider>

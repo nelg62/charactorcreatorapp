@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 
 export default function AvatarCustomizer() {
-  const { extractedEnums, accessoriesEnabled } = useAvatar();
+  const { extractedEnums, avatarData, accessoriesEnabled } = useAvatar();
   const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
   const [attributeIndexes, setAttributeIndexes] = useState({
     accessories: 0,
@@ -18,7 +18,13 @@ export default function AvatarCustomizer() {
   });
 
   const attributeChoices =
-    extractedEnums[activeAttribute as keyof typeof extractedEnums] || [];
+    {
+      accessories: extractedEnums.accessories,
+      face: extractedEnums.face,
+      facialHair: extractedEnums.facialHair,
+      head: extractedEnums.head,
+      mask: extractedEnums.mask,
+    }[activeAttribute] || [];
 
   const handleNavigation = (direction: "next" | "previous") => {
     setAttributeIndexes((prevIndexes) => {
@@ -41,7 +47,9 @@ export default function AvatarCustomizer() {
   };
 
   const avatarDataPreview = useMemo(() => {
-    const getAvatarOptions = (): StyleOptions<openPeeps.Options> => {
+    const getAvatarOptions = (
+      extractedEnums: Record<string, string[]>
+    ): StyleOptions<openPeeps.Options> => {
       const selectedAccessoryIndex = attributeIndexes.accessories;
       const selectedAccessory =
         extractedEnums.accessories[selectedAccessoryIndex];
@@ -52,7 +60,7 @@ export default function AvatarCustomizer() {
         accessoriesProbability: accessoriesEnabled ? 100 : 0,
       };
     };
-    const avatarOptions = getAvatarOptions();
+    const avatarOptions = getAvatarOptions(extractedEnums);
 
     return createAvatar(openPeeps, avatarOptions).toDataUri();
   }, [attributeIndexes, accessoriesEnabled, extractedEnums]);
@@ -63,12 +71,7 @@ export default function AvatarCustomizer() {
     <div className="avatar-customizer">
       {/* Display current avatar */}
       <div className="avatar-display">
-        <Image
-          src={avatarDataPreview}
-          alt="Display Avatar"
-          height={100}
-          width={100}
-        />
+        <Image src={avatarData} alt="Display Avatar" height={100} width={100} />
       </div>
 
       {/* Attribute Selector */}
