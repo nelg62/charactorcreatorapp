@@ -1,40 +1,34 @@
 "use client";
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
-import { useEffect, useState } from "react";
+import { createAvatar, StyleOptions } from "@dicebear/core";
+import { useMemo, useState } from "react";
+// import ColorPicker from "./ColorPicker";
+import Image from "next/image";
 import ColorPicker from "./ColorPicker";
 
 export default function AvatarCustomizer() {
   // context variables
   const {
-    avatarData,
-    randomizeAvatar,
-    setSelectedAccessories,
-    avatarAccessoriesChoices,
-    setSelectedFace,
-    avatarFaceChoices,
-    setSelectedFacialHair,
-    avatarFacialHairChoices,
-    setSelectedHead,
-    avatarHeadChoices,
-    setSelectedMask,
-    avatarMaskChoices,
-    accessoriesEnabled,
-    setAccessoriesEnabled,
-    facialHairEnabled,
-    setFacialHairEnabled,
-    maskEnabled,
-    setMaskEnabled,
+    extractedEnums,
+    isEnabled,
+    toggleState,
     clothingColor,
-    setClothingColor,
     headContrastColor,
-    setHeadContrastColor,
     backgroundColor,
-    setBackgroundColor,
     skinColor,
+    setClothingColor,
+    setHeadContrastColor,
+    setBackgroundColor,
     setSkinColor,
   } = useAvatar();
+  const [activeAttribute, setActiveAttribute] =
+    useState<keyof typeof extractedEnums>("accessories");
+  const [attributeIndexes, setAttributeIndexes] = useState<
+    Record<string, number>
+  >(
+    Object.keys(extractedEnums).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
+  );
 
   const getRandomColor = () => {
     return Math.floor(Math.random() * 16777215)
@@ -48,123 +42,100 @@ export default function AvatarCustomizer() {
   const randomizeBackgroundColor = () => setBackgroundColor(getRandomColor());
   const randomizeSkinColor = () => setSkinColor(getRandomColor());
 
-  const [attributeIndexes, setAttributeIndexes] = useState({
-    accessories: 0,
-    face: 0,
-    facialHair: 0,
-    head: 0,
-    mask: 0,
-  });
+  const randomizeAllColors = () => {
+    setClothingColor(getRandomColor());
+    setHeadContrastColor(getRandomColor());
+    setBackgroundColor(getRandomColor());
+    setSkinColor(getRandomColor());
+  };
 
-  const [activeAttribute, setActiveAttribute] = useState<string>("accessories");
-
-  const attributeChoices =
-    {
-      accessories: avatarAccessoriesChoices,
-      face: avatarFaceChoices,
-      facialHair: avatarFacialHairChoices,
-      head: avatarHeadChoices,
-      mask: avatarMaskChoices,
-    }[activeAttribute] || [];
+  const attributeChoices = extractedEnums[activeAttribute] || [];
 
   // Update Avatar
-  useEffect(() => {
-    const currentIndex =
-      attributeIndexes[activeAttribute as keyof typeof attributeIndexes];
-
-    if (activeAttribute === "accessories") {
-      setSelectedAccessories(
-        accessoriesEnabled ? avatarAccessoriesChoices[currentIndex] : ""
-      );
-    } else if (activeAttribute === "face") {
-      setSelectedFace(avatarFaceChoices[currentIndex]);
-    } else if (activeAttribute === "facialHair") {
-      setSelectedFacialHair(
-        facialHairEnabled ? avatarFacialHairChoices[currentIndex] : ""
-      );
-    } else if (activeAttribute === "head") {
-      setSelectedHead(avatarHeadChoices[currentIndex]);
-    } else if (activeAttribute === "mask") {
-      setSelectedMask(maskEnabled ? avatarMaskChoices[currentIndex] : "");
-    }
+  const avatarDataPreview = useMemo(() => {
+    const avatarOptions: StyleOptions<openPeeps.Options> = {
+      size: 128,
+      ...Object.fromEntries(
+        Object.entries(attributeIndexes).map(([key, index]) => [
+          key,
+          [extractedEnums[key]?.[index]] as unknown,
+        ])
+      ),
+      accessoriesProbability: isEnabled.accessories ? 100 : 0,
+      facialHairProbability: isEnabled.facialHair ? 100 : 0,
+      maskProbability: isEnabled.mask ? 100 : 0,
+      clothingColor: [clothingColor],
+      headContrastColor: [headContrastColor],
+      backgroundColor: [backgroundColor],
+      skinColor: [skinColor],
+    };
+    return createAvatar(openPeeps, avatarOptions).toDataUri();
   }, [
     attributeIndexes,
-    activeAttribute,
-    accessoriesEnabled,
-    facialHairEnabled,
-    maskEnabled,
-    setSelectedAccessories,
-    avatarAccessoriesChoices,
-    setSelectedFace,
-    avatarFaceChoices,
-    setSelectedFacialHair,
-    avatarFacialHairChoices,
-    setSelectedHead,
-    avatarHeadChoices,
-    setSelectedMask,
-    avatarMaskChoices,
+    backgroundColor,
+    clothingColor,
+    extractedEnums,
+    headContrastColor,
+    isEnabled,
+    skinColor,
   ]);
-
-  const randomizeSelection = () => {
-    const totalChoices = attributeChoices.length;
-    if (totalChoices > 0) {
-      const randomIndex = Math.floor(Math.random() * totalChoices);
-      setAttributeIndexes((prevIndexes) => ({
-        ...prevIndexes,
-        [activeAttribute]: randomIndex,
-      }));
-    }
-  };
 
   // Generalized Navigation fuunction
   const handleNavigation = (direction: "next" | "previous") => {
-    setAttributeIndexes((prevIndexes) => {
-      const currentIndex =
-        prevIndexes[activeAttribute as keyof typeof prevIndexes];
+    setAttributeIndexes((prev) => {
+      const currentIndex = prev[activeAttribute];
       const totalChoices = attributeChoices.length;
-
       const newIndex =
         direction === "next"
           ? (currentIndex + 1) % totalChoices
-          : currentIndex === 0
-          ? totalChoices - 1
-          : currentIndex - 1;
-
-      return {
-        ...prevIndexes,
-        [activeAttribute]: newIndex,
-      };
+          : (currentIndex - 1 + totalChoices) % totalChoices;
+      return { ...prev, [activeAttribute]: newIndex };
     });
   };
 
-  // General toggle function
-  const toggleAttribute = (
-    attribute: "accessories" | "facialHair" | "mask"
-  ) => {
-    const toggles = {
-      accessories: () => setAccessoriesEnabled(!accessoriesEnabled),
-      facialHair: () => setFacialHairEnabled(!facialHairEnabled),
-      mask: () => setMaskEnabled(!maskEnabled),
-    };
-    toggles[attribute]?.();
+  const randomizeAllItems = () => {
+    const newIndexes = { ...attributeIndexes };
+    for (const key in extractedEnums) {
+      const options = extractedEnums[key];
+      newIndexes[key] = Math.floor(Math.random() * options.length);
+    }
+    setAttributeIndexes(newIndexes);
   };
 
-  // // Button Choice Text
-  const buttonChoices = ["accessories", "face", "facialHair", "head", "mask"];
+  const randomizeSelectedAttribute = () => {
+    if (!activeAttribute) return;
+    const options = extractedEnums[activeAttribute];
+    setAttributeIndexes((prev) => ({
+      ...prev,
+      [activeAttribute]: Math.floor(Math.random() * options.length),
+    }));
+  };
+
+  const randomizeAll = () => {
+    randomizeAllItems();
+    randomizeAllColors();
+  };
 
   return (
     <div className="avatar-customizer">
       {/* Display current avatar */}
       <div className="avatar-display">
-        <img src={avatarData} alt="Current Avatar" />
+        <Image
+          src={avatarDataPreview}
+          alt="Display Avatar"
+          height={100}
+          width={100}
+        />
       </div>
 
       {/* Attribute Selector */}
       <div className="attribure-selector">
-        {buttonChoices.map((attribute) => (
+        {Object.keys(extractedEnums).map((attribute) => (
           <button
             key={attribute}
-            onClick={() => setActiveAttribute(attribute)}
+            onClick={() =>
+              setActiveAttribute(attribute as keyof typeof extractedEnums)
+            }
             className={`btn ${activeAttribute === attribute ? "active" : ""}`}
           >
             {attribute}
@@ -174,42 +145,43 @@ export default function AvatarCustomizer() {
 
       <div className="randomize-container">
         {/* Randomize selected Button */}
-        <button onClick={randomizeSelection} className="btn randomize-btn">
+        <button
+          onClick={randomizeSelectedAttribute}
+          className="btn randomize-btn"
+        >
           Randomize {activeAttribute}
         </button>
 
         {/* Randomize All Button */}
-        <button onClick={randomizeAvatar} className="btn randomize-btn">
+        <button onClick={randomizeAllItems} className="btn randomize-btn">
+          Randomize All Items
+        </button>
+
+        {/* Randomize all colors */}
+        <button onClick={randomizeAllColors} className="btn randomize-btn">
+          Randomize All Colors
+        </button>
+
+        {/* Randomize all */}
+        <button onClick={randomizeAll} className="btn randomize-btn">
           Randomize All
         </button>
       </div>
 
       {/* Toggle Button for Accessories and facial hair*/}
-      {(activeAttribute === "accessories" ||
-        activeAttribute === "facialHair" ||
-        activeAttribute === "mask") && (
+      {["accessories", "facialHair", "mask"].includes(activeAttribute) && (
         <div className="toggle-container">
           <button
             onClick={() =>
-              toggleAttribute(
+              toggleState(
                 activeAttribute as "accessories" | "facialHair" | "mask"
               )
             }
             className="btn toggle-btn"
           >
-            {activeAttribute === "accessories"
-              ? accessoriesEnabled
-                ? "Disable Accessories"
-                : "Enable Accessories"
-              : activeAttribute === "facialHair"
-              ? facialHairEnabled
-                ? "Disable Facial Hair"
-                : "Enable Facial Hair"
-              : activeAttribute === "mask"
-              ? maskEnabled
-                ? "Disable Mask"
-                : "Enable Mask"
-              : ""}
+            {isEnabled[activeAttribute as keyof typeof isEnabled]
+              ? `Disable ${activeAttribute}`
+              : `Enable ${activeAttribute}`}
           </button>
         </div>
       )}
@@ -256,44 +228,64 @@ export default function AvatarCustomizer() {
         {/* Display preview of current attribute choice */}
         <div className="preview-display">
           {attributeChoices.length > 0 && (
-            <img
+            <Image
               src={createAvatar(openPeeps, {
                 size: 128,
                 accessories:
-                  activeAttribute === "accessories" && accessoriesEnabled
-                    ? [attributeChoices[attributeIndexes.accessories]]
+                  activeAttribute === "accessories" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
+                    ? ([
+                        attributeChoices[attributeIndexes.accessories],
+                      ] as openPeeps.Options["accessories"])
                     : [],
                 accessoriesProbability:
-                  activeAttribute === "accessories" && accessoriesEnabled
+                  activeAttribute === "accessories" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
                     ? 100
                     : 0,
                 face:
                   activeAttribute === "face"
-                    ? [attributeChoices[attributeIndexes.face]]
+                    ? ([
+                        attributeChoices[attributeIndexes.face],
+                      ] as openPeeps.Options["face"])
                     : [],
                 facialHair:
-                  activeAttribute === "facialHair" && facialHairEnabled
-                    ? [attributeChoices[attributeIndexes.facialHair]]
+                  activeAttribute === "facialHair" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
+                    ? ([
+                        attributeChoices[attributeIndexes.facialHair],
+                      ] as openPeeps.Options["facialHair"])
                     : [],
                 facialHairProbability:
-                  activeAttribute === "facialHair" && facialHairEnabled
+                  activeAttribute === "facialHair" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
                     ? 100
                     : 0,
                 head:
                   activeAttribute === "head"
-                    ? [attributeChoices[attributeIndexes.head]]
+                    ? ([
+                        attributeChoices[attributeIndexes.head],
+                      ] as openPeeps.Options["head"])
                     : [],
                 mask:
-                  activeAttribute === "mask" && maskEnabled
-                    ? [attributeChoices[attributeIndexes.mask]]
+                  activeAttribute === "mask" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
+                    ? ([
+                        attributeChoices[attributeIndexes.mask],
+                      ] as openPeeps.Options["mask"])
                     : [],
                 maskProbability:
-                  activeAttribute === "mask" && maskEnabled ? 100 : 0,
+                  activeAttribute === "mask" &&
+                  isEnabled[activeAttribute as keyof typeof isEnabled]
+                    ? 100
+                    : 0,
                 clothingColor: [clothingColor],
                 headContrastColor: [headContrastColor],
                 backgroundColor: [backgroundColor],
               }).toDataUri()}
-              alt={`Preview ${activeAttribute} option`}
+              alt="Avatar Item Preview"
+              height={128}
+              width={128}
             />
           )}
           <h1 className="text-center">
