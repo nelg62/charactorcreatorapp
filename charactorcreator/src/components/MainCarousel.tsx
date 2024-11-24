@@ -304,6 +304,43 @@ export default function AvatarCustomizer() {
           Next
         </button>
       </div>
+
+      {/* display options */}
+      <div className="attribute-buttons">
+        {attributeChoices.map((choice, index) => (
+          <button
+            key={index}
+            onClick={() =>
+              setAttributeIndexes((prev) => ({
+                ...prev,
+                [activeAttribute]: index,
+              }))
+            }
+            className={`btn choice-btn ${
+              attributeIndexes[activeAttribute] === index ? "active" : ""
+            }`}
+          >
+            <Image
+              src={createAvatar(openPeeps, {
+                size: 64,
+                [activeAttribute]: [choice] as unknown,
+                accessoriesProbability:
+                  activeAttribute === "accessories" ? 100 : 0,
+                facialHairProbability:
+                  activeAttribute === "facialHair" ? 100 : 0,
+                maskProbability: activeAttribute === "mask" ? 100 : 0,
+                clothingColor: [clothingColor],
+                headContrastColor: [headContrastColor],
+                backgroundColor: [backgroundColor],
+              }).toDataUri()}
+              alt={`${choice} preview`}
+              height={64}
+              width={64}
+            />
+            <span>{choice}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
