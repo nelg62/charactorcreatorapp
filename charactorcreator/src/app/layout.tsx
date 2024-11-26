@@ -31,7 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AvatarProvider>
-          <NavBar />
+          {/* <NavBar /> */}
           {children}
         </AvatarProvider>
       </body>

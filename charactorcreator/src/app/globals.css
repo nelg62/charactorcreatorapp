@@ -90,7 +90,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
+/* 
 .avatar-customizer {
   display: flex;
   flex-direction: column;
@@ -143,4 +143,4 @@ body {
 
 .randomize-btn:hover {
   background-color: #ffaa00;
-}
+} */
