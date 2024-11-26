@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 // import ColorPicker from "./ColorPicker";
 import Image from "next/image";
 import ColorPicker from "./ColorPicker";
+import AvatarPreview from "./AvatarPreview";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -163,7 +164,8 @@ export default function AvatarCustomizer() {
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-5xl bg-white shadow-lg rounded-lg">
         {/* Display current avatar */}
-        <div className="w-1/3 p-6 flex items-center justify-center border-r">
+        <AvatarPreview avatarDataPreview={avatarDataPreview} />
+        {/* <div className="w-1/3 p-6 flex items-center justify-center border-r">
           <Image
             src={avatarDataPreview}
             alt="Display Avatar"
@@ -171,7 +173,7 @@ export default function AvatarCustomizer() {
             width={100}
             className="rounded-full border border-gray-300"
           />
-        </div>
+        </div> */}
         <div className="w-2/3 p-6 flex flex-col gap-6">
           {/* Attribute Selector */}
           <div className="grid grid-cols-3 gap-2">
