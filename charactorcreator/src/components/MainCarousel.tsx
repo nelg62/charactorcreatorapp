@@ -5,9 +5,10 @@ import { createAvatar, StyleOptions } from "@dicebear/core";
 import { useEffect, useMemo, useState } from "react";
 // import ColorPicker from "./ColorPicker";
 import Image from "next/image";
-import ColorPicker from "./ColorPicker";
+// import ColorPicker from "./ColorPicker";
 import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
+import ColorCombinePickers from "./ColorCombinePickers";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -257,36 +258,51 @@ export default function AvatarCustomizer() {
 
           {/* Choose Colors */}
 
-          <div className="grid grid-cols-2 gap-4">
-            {/* Clothing Color */}
-            <ColorPicker
+          <ColorCombinePickers
+            clothingColor={clothingColor}
+            headContrastColor={headContrastColor}
+            backgroundColor={backgroundColor}
+            skinColor={skinColor}
+            setClothingColor={setClothingColor}
+            setHeadContrastColor={setHeadContrastColor}
+            setBackgroundColor={setBackgroundColor}
+            setSkinColor={setSkinColor}
+            randomizeClothingColor={randomizeClothingColor}
+            randomizeHeadContrastColor={randomizeHeadContrastColor}
+            randomizeBackgroundColor={randomizeBackgroundColor}
+            randomizeSkinColor={randomizeSkinColor}
+          />
+
+          {/* <div className="grid grid-cols-2 gap-4"> */}
+          {/* Clothing Color */}
+          {/* <ColorPicker
               label="Clothing Color"
               color={clothingColor}
               setColor={setClothingColor}
               randomizeColor={randomizeClothingColor}
-            />
-            {/* Head contrast Color */}
-            <ColorPicker
+            /> */}
+          {/* Head contrast Color */}
+          {/* <ColorPicker
               label="Head Contrast Color"
               color={headContrastColor}
               setColor={setHeadContrastColor}
               randomizeColor={randomizeHeadContrastColor}
-            />
-            {/* Background Color */}
-            <ColorPicker
+            /> */}
+          {/* Background Color */}
+          {/* <ColorPicker
               label="Background Color"
               color={backgroundColor}
               setColor={setBackgroundColor}
               randomizeColor={randomizeBackgroundColor}
-            />
-            {/* Skin Color */}
-            <ColorPicker
+            /> */}
+          {/* Skin Color */}
+          {/* <ColorPicker
               label="Skin Color"
               color={skinColor}
               setColor={setSkinColor}
               randomizeColor={randomizeSkinColor}
             />
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-between">
             {/* Previous button */}
