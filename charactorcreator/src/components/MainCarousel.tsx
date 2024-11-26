@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import ColorPicker from "./ColorPicker";
 import AvatarPreview from "./AvatarPreview";
+import RandomizeControls from "./RandomizeControls";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -194,39 +195,47 @@ export default function AvatarCustomizer() {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            {/* Randomize selected Button */}
-            <button
+          {/* <div className="flex flex-wrap gap-4"> */}
+          {/* Randomize selected Button */}
+
+          <RandomizeControls
+            randomizeSelectedAttribute={randomizeSelectedAttribute}
+            randomizeAllItems={randomizeAllItems}
+            randomizeAllColors={randomizeAllColors}
+            randomizeAll={randomizeAll}
+            activeAttribute={activeAttribute}
+          />
+          {/* <button
               onClick={randomizeSelectedAttribute}
               className="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Randomize {activeAttribute}
-            </button>
+            </button> */}
 
-            {/* Randomize All Button */}
-            <button
+          {/* Randomize All Button */}
+          {/* <button
               onClick={randomizeAllItems}
               className="px-4 py-2 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-600"
             >
               Randomize All Items
-            </button>
+            </button> */}
 
-            {/* Randomize all colors */}
-            <button
+          {/* Randomize all colors */}
+          {/* <button
               onClick={randomizeAllColors}
               className="px-4 py-2 text-sm font-medium bg-yellow-500 text-white rounded hover:bg-yellow-600"
             >
               Randomize All Colors
-            </button>
+            </button> */}
 
-            {/* Randomize all */}
-            <button
+          {/* Randomize all */}
+          {/* <button
               onClick={randomizeAll}
               className="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded hover:bg-red-600"
             >
               Randomize All
             </button>
-          </div>
+          </div> */}
 
           {/* Toggle Button for Accessories and facial hair*/}
           {["accessories", "facialHair", "mask"].includes(activeAttribute) && (
