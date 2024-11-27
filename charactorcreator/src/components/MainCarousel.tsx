@@ -2,23 +2,20 @@
 import { useAvatar } from "@/app/context/AvatarContext";
 import { openPeeps } from "@dicebear/collection";
 import { createAvatar, StyleOptions } from "@dicebear/core";
-import { useEffect, useMemo, useState } from "react";
-// import ColorPicker from "./ColorPicker";
-// import Image from "next/image";
-// import ColorPicker from "./ColorPicker";
+import { useMemo, useState } from "react";
 import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
 import ColorCombinePickers from "./ColorCombinePickers";
 import ToggleButton from "./ToggleButton";
 import DisplayCurrentChoice from "./DisplayCurrentChoice";
 import ButtonOptions from "./ButtonOptions";
+import AttributeSelector from "./AttributeSelector";
 
 export default function AvatarCustomizer() {
   // context variables
   const {
     extractedEnums,
     isEnabled,
-    // toggleState,
     clothingColor,
     headContrastColor,
     backgroundColor,
@@ -35,9 +32,6 @@ export default function AvatarCustomizer() {
   >(
     Object.keys(extractedEnums).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
   );
-
-  // const [visibleStartIndex, setVisibleStartIndex] = useState(0);
-  // const [visibleCount, setVisibleCount] = useState(3);
 
   const getRandomColor = () => {
     return Math.floor(Math.random() * 16777215)
@@ -125,46 +119,6 @@ export default function AvatarCustomizer() {
     randomizeAllColors();
   };
 
-  // useEffect(() => {
-  //   // Dynamically update visibleCount based on screen width
-  //   const handleResize = () => {
-  //     if (window.innerWidth < 640) {
-  //       setVisibleCount(3);
-  //     } else if (window.innerWidth < 1024) {
-  //       setVisibleCount(5);
-  //     } else {
-  //       setVisibleCount(7);
-  //     }
-  //   };
-  //   handleResize(); // Set initial count
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
-  // const handleCarouselNavigation = (direction: "left" | "right") => {
-  //   setVisibleStartIndex((prev) => {
-  //     const totalChoices = attributeChoices.length;
-  //     if (direction === "right") {
-  //       return (prev + visibleCount) % totalChoices;
-  //     } else {
-  //       return (prev - visibleCount + totalChoices) % totalChoices;
-  //     }
-  //   });
-  // };
-
-  // Determine visible attribute choices
-  // const visibleChoices = attributeChoices.slice(
-  //   visibleStartIndex,
-  //   visibleStartIndex + visibleCount
-  // );
-
-  // If at the end, wrap around
-  // if (visibleChoices.length < visibleCount) {
-  //   visibleChoices.push(
-  //     ...attributeChoices.slice(0, visibleCount - visibleChoices.length)
-  //   );
-  // }
-
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-5xl bg-white shadow-lg rounded-lg">
@@ -173,23 +127,11 @@ export default function AvatarCustomizer() {
 
         <div className="w-2/3 p-6 flex flex-col gap-6">
           {/* Attribute Selector */}
-          <div className="grid grid-cols-3 gap-2">
-            {Object.keys(extractedEnums).map((attribute) => (
-              <button
-                key={attribute}
-                onClick={() =>
-                  setActiveAttribute(attribute as keyof typeof extractedEnums)
-                }
-                className={`py-2 px-4 text-sm font-medium rounded ${
-                  activeAttribute === attribute
-                    ? "bg-blue-600"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
-              >
-                {attribute}
-              </button>
-            ))}
-          </div>
+          <AttributeSelector
+            extractedEnums={extractedEnums}
+            activeAttribute={activeAttribute}
+            setActiveAttribute={setActiveAttribute}
+          />
 
           {/* Randomize selected Button */}
 
@@ -239,61 +181,6 @@ export default function AvatarCustomizer() {
             activeAttribute={activeAttribute}
             attributeIndexes={attributeIndexes}
           />
-
-          {/* <div className="attribute-buttons flex items-center">
-            <button
-              onClick={() => handleCarouselNavigation("left")}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-              &lt;
-            </button>
-
-            <div className="flex gap-2">
-              {visibleChoices.map((choice, index) => (
-                <button
-                  key={index}
-                  onClick={() =>
-                    setAttributeIndexes((prev) => ({
-                      ...prev,
-                      [activeAttribute]:
-                        (visibleStartIndex + index) % attributeChoices.length,
-                    }))
-                  }
-                  className={`btn choice-btn ${
-                    attributeIndexes[activeAttribute] ===
-                    (visibleStartIndex + index) % attributeChoices.length
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  <Image
-                    src={createAvatar(openPeeps, {
-                      size: 64,
-                      [activeAttribute]: [choice] as unknown,
-                      accessoriesProbability:
-                        activeAttribute === "accessories" ? 100 : 0,
-                      facialHairProbability:
-                        activeAttribute === "facialHair" ? 100 : 0,
-                      clothingColor: [clothingColor],
-                      headContrastColor: [headContrastColor],
-                      backgroundColor: [backgroundColor],
-                      skinColor: [skinColor],
-                    }).toDataUri()}
-                    alt={`${choice} preview`}
-                    height={64}
-                    width={64}
-                  />
-                  <span>{choice}</span>
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => handleCarouselNavigation("right")}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-              &gt;
-            </button>
-          </div> */}
         </div>
       </div>
     </div>
