@@ -9,13 +9,14 @@ import Image from "next/image";
 import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
 import ColorCombinePickers from "./ColorCombinePickers";
+import ToggleButton from "./ToggleButton";
 
 export default function AvatarCustomizer() {
   // context variables
   const {
     extractedEnums,
     isEnabled,
-    toggleState,
+    // toggleState,
     clothingColor,
     headContrastColor,
     backgroundColor,
@@ -239,7 +240,11 @@ export default function AvatarCustomizer() {
           </div> */}
 
           {/* Toggle Button for Accessories and facial hair*/}
-          {["accessories", "facialHair", "mask"].includes(activeAttribute) && (
+          <ToggleButton
+            activeAttribute={activeAttribute}
+            isEnabled={isEnabled}
+          />
+          {/* {["accessories", "facialHair", "mask"].includes(activeAttribute) && (
             <div className="px-4 py-2 text-sm font-medium bg-blue-500 flex items-center justify-center rounded text-white">
               <button
                 onClick={() =>
@@ -254,7 +259,7 @@ export default function AvatarCustomizer() {
                   : `Enable ${activeAttribute}`}
               </button>
             </div>
-          )}
+          )} */}
 
           {/* Choose Colors */}
 
