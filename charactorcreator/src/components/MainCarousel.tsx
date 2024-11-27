@@ -4,13 +4,14 @@ import { openPeeps } from "@dicebear/collection";
 import { createAvatar, StyleOptions } from "@dicebear/core";
 import { useEffect, useMemo, useState } from "react";
 // import ColorPicker from "./ColorPicker";
-import Image from "next/image";
+// import Image from "next/image";
 // import ColorPicker from "./ColorPicker";
 import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
 import ColorCombinePickers from "./ColorCombinePickers";
 import ToggleButton from "./ToggleButton";
 import DisplayCurrentChoice from "./DisplayCurrentChoice";
+import ButtonOptions from "./ButtonOptions";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -35,8 +36,8 @@ export default function AvatarCustomizer() {
     Object.keys(extractedEnums).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
   );
 
-  const [visibleStartIndex, setVisibleStartIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(3);
+  // const [visibleStartIndex, setVisibleStartIndex] = useState(0);
+  // const [visibleCount, setVisibleCount] = useState(3);
 
   const getRandomColor = () => {
     return Math.floor(Math.random() * 16777215)
@@ -124,45 +125,45 @@ export default function AvatarCustomizer() {
     randomizeAllColors();
   };
 
-  useEffect(() => {
-    // Dynamically update visibleCount based on screen width
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setVisibleCount(3);
-      } else if (window.innerWidth < 1024) {
-        setVisibleCount(5);
-      } else {
-        setVisibleCount(7);
-      }
-    };
-    handleResize(); // Set initial count
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   // Dynamically update visibleCount based on screen width
+  //   const handleResize = () => {
+  //     if (window.innerWidth < 640) {
+  //       setVisibleCount(3);
+  //     } else if (window.innerWidth < 1024) {
+  //       setVisibleCount(5);
+  //     } else {
+  //       setVisibleCount(7);
+  //     }
+  //   };
+  //   handleResize(); // Set initial count
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
-  const handleCarouselNavigation = (direction: "left" | "right") => {
-    setVisibleStartIndex((prev) => {
-      const totalChoices = attributeChoices.length;
-      if (direction === "right") {
-        return (prev + visibleCount) % totalChoices;
-      } else {
-        return (prev - visibleCount + totalChoices) % totalChoices;
-      }
-    });
-  };
+  // const handleCarouselNavigation = (direction: "left" | "right") => {
+  //   setVisibleStartIndex((prev) => {
+  //     const totalChoices = attributeChoices.length;
+  //     if (direction === "right") {
+  //       return (prev + visibleCount) % totalChoices;
+  //     } else {
+  //       return (prev - visibleCount + totalChoices) % totalChoices;
+  //     }
+  //   });
+  // };
 
   // Determine visible attribute choices
-  const visibleChoices = attributeChoices.slice(
-    visibleStartIndex,
-    visibleStartIndex + visibleCount
-  );
+  // const visibleChoices = attributeChoices.slice(
+  //   visibleStartIndex,
+  //   visibleStartIndex + visibleCount
+  // );
 
   // If at the end, wrap around
-  if (visibleChoices.length < visibleCount) {
-    visibleChoices.push(
-      ...attributeChoices.slice(0, visibleCount - visibleChoices.length)
-    );
-  }
+  // if (visibleChoices.length < visibleCount) {
+  //   visibleChoices.push(
+  //     ...attributeChoices.slice(0, visibleCount - visibleChoices.length)
+  //   );
+  // }
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
@@ -223,8 +224,6 @@ export default function AvatarCustomizer() {
             randomizeSkinColor={randomizeSkinColor}
           />
 
-          {/* <div className="flex items-center justify-between"> */}
-
           <DisplayCurrentChoice
             attributeChoices={attributeChoices}
             activeAttribute={activeAttribute}
@@ -233,96 +232,15 @@ export default function AvatarCustomizer() {
             handleNavigation={handleNavigation}
           />
 
-          {/* Previous button */}
-          {/* <button
-              onClick={() => handleNavigation("previous")}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-              Previous
-            </button> */}
-
-          {/* Display preview of current attribute choice */}
-          {/* <div className="preview-display">
-              {attributeChoices.length > 0 && (
-                <Image
-                  src={createAvatar(openPeeps, {
-                    size: 128,
-                    accessories:
-                      activeAttribute === "accessories" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? ([
-                            attributeChoices[attributeIndexes.accessories],
-                          ] as openPeeps.Options["accessories"])
-                        : [],
-                    accessoriesProbability:
-                      activeAttribute === "accessories" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? 100
-                        : 0,
-                    face:
-                      activeAttribute === "face"
-                        ? ([
-                            attributeChoices[attributeIndexes.face],
-                          ] as openPeeps.Options["face"])
-                        : [],
-                    facialHair:
-                      activeAttribute === "facialHair" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? ([
-                            attributeChoices[attributeIndexes.facialHair],
-                          ] as openPeeps.Options["facialHair"])
-                        : [],
-                    facialHairProbability:
-                      activeAttribute === "facialHair" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? 100
-                        : 0,
-                    head:
-                      activeAttribute === "head"
-                        ? ([
-                            attributeChoices[attributeIndexes.head],
-                          ] as openPeeps.Options["head"])
-                        : [],
-                    mask:
-                      activeAttribute === "mask" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? ([
-                            attributeChoices[attributeIndexes.mask],
-                          ] as openPeeps.Options["mask"])
-                        : [],
-                    maskProbability:
-                      activeAttribute === "mask" &&
-                      isEnabled[activeAttribute as keyof typeof isEnabled]
-                        ? 100
-                        : 0,
-                    clothingColor: [clothingColor],
-                    headContrastColor: [headContrastColor],
-                    backgroundColor: [backgroundColor],
-                  }).toDataUri()}
-                  alt="Avatar Item Preview"
-                  height={128}
-                  width={128}
-                />
-              )}
-              <h1 className="text-center">
-                {
-                  attributeChoices[
-                    attributeIndexes[
-                      activeAttribute as keyof typeof attributeIndexes
-                    ]
-                  ]
-                }
-              </h1>
-            </div> */}
-
-          {/* Next Button */}
-          {/* <button onClick={() => handleNavigation("next")} className="btn">
-              Next
-            </button>
-          </div> */}
-
           {/* display options */}
-          <div className="attribute-buttons flex items-center">
+          <ButtonOptions
+            attributeChoices={attributeChoices}
+            setAttributeIndexes={setAttributeIndexes}
+            activeAttribute={activeAttribute}
+            attributeIndexes={attributeIndexes}
+          />
+
+          {/* <div className="attribute-buttons flex items-center">
             <button
               onClick={() => handleCarouselNavigation("left")}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
@@ -375,7 +293,7 @@ export default function AvatarCustomizer() {
             >
               &gt;
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
