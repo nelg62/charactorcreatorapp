@@ -10,6 +10,7 @@ import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
 import ColorCombinePickers from "./ColorCombinePickers";
 import ToggleButton from "./ToggleButton";
+import DisplayCurrentChoice from "./DisplayCurrentChoice";
 
 export default function AvatarCustomizer() {
   // context variables
@@ -222,17 +223,26 @@ export default function AvatarCustomizer() {
             randomizeSkinColor={randomizeSkinColor}
           />
 
-          <div className="flex items-center justify-between">
-            {/* Previous button */}
-            <button
+          {/* <div className="flex items-center justify-between"> */}
+
+          <DisplayCurrentChoice
+            attributeChoices={attributeChoices}
+            activeAttribute={activeAttribute}
+            isEnabled={isEnabled}
+            attributeIndexes={attributeIndexes}
+            handleNavigation={handleNavigation}
+          />
+
+          {/* Previous button */}
+          {/* <button
               onClick={() => handleNavigation("previous")}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
             >
               Previous
-            </button>
+            </button> */}
 
-            {/* Display preview of current attribute choice */}
-            <div className="preview-display">
+          {/* Display preview of current attribute choice */}
+          {/* <div className="preview-display">
               {attributeChoices.length > 0 && (
                 <Image
                   src={createAvatar(openPeeps, {
@@ -303,13 +313,13 @@ export default function AvatarCustomizer() {
                   ]
                 }
               </h1>
-            </div>
+            </div> */}
 
-            {/* Next Button */}
-            <button onClick={() => handleNavigation("next")} className="btn">
+          {/* Next Button */}
+          {/* <button onClick={() => handleNavigation("next")} className="btn">
               Next
             </button>
-          </div>
+          </div> */}
 
           {/* display options */}
           <div className="attribute-buttons flex items-center">
