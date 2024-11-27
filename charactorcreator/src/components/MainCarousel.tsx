@@ -168,15 +168,7 @@ export default function AvatarCustomizer() {
       <div className="flex w-full max-w-5xl bg-white shadow-lg rounded-lg">
         {/* Display current avatar */}
         <AvatarPreview avatarDataPreview={avatarDataPreview} />
-        {/* <div className="w-1/3 p-6 flex items-center justify-center border-r">
-          <Image
-            src={avatarDataPreview}
-            alt="Display Avatar"
-            height={100}
-            width={100}
-            className="rounded-full border border-gray-300"
-          />
-        </div> */}
+
         <div className="w-2/3 p-6 flex flex-col gap-6">
           {/* Attribute Selector */}
           <div className="grid grid-cols-3 gap-2">
@@ -197,7 +189,6 @@ export default function AvatarCustomizer() {
             ))}
           </div>
 
-          {/* <div className="flex flex-wrap gap-4"> */}
           {/* Randomize selected Button */}
 
           <RandomizeControls
@@ -207,59 +198,12 @@ export default function AvatarCustomizer() {
             randomizeAll={randomizeAll}
             activeAttribute={activeAttribute}
           />
-          {/* <button
-              onClick={randomizeSelectedAttribute}
-              className="px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Randomize {activeAttribute}
-            </button> */}
-
-          {/* Randomize All Button */}
-          {/* <button
-              onClick={randomizeAllItems}
-              className="px-4 py-2 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Randomize All Items
-            </button> */}
-
-          {/* Randomize all colors */}
-          {/* <button
-              onClick={randomizeAllColors}
-              className="px-4 py-2 text-sm font-medium bg-yellow-500 text-white rounded hover:bg-yellow-600"
-            >
-              Randomize All Colors
-            </button> */}
-
-          {/* Randomize all */}
-          {/* <button
-              onClick={randomizeAll}
-              className="px-4 py-2 text-sm font-medium bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Randomize All
-            </button>
-          </div> */}
 
           {/* Toggle Button for Accessories and facial hair*/}
           <ToggleButton
             activeAttribute={activeAttribute}
             isEnabled={isEnabled}
           />
-          {/* {["accessories", "facialHair", "mask"].includes(activeAttribute) && (
-            <div className="px-4 py-2 text-sm font-medium bg-blue-500 flex items-center justify-center rounded text-white">
-              <button
-                onClick={() =>
-                  toggleState(
-                    activeAttribute as "accessories" | "facialHair" | "mask"
-                  )
-                }
-                className="btn toggle-btn"
-              >
-                {isEnabled[activeAttribute as keyof typeof isEnabled]
-                  ? `Disable ${activeAttribute}`
-                  : `Enable ${activeAttribute}`}
-              </button>
-            </div>
-          )} */}
 
           {/* Choose Colors */}
 
@@ -277,37 +221,6 @@ export default function AvatarCustomizer() {
             randomizeBackgroundColor={randomizeBackgroundColor}
             randomizeSkinColor={randomizeSkinColor}
           />
-
-          {/* <div className="grid grid-cols-2 gap-4"> */}
-          {/* Clothing Color */}
-          {/* <ColorPicker
-              label="Clothing Color"
-              color={clothingColor}
-              setColor={setClothingColor}
-              randomizeColor={randomizeClothingColor}
-            /> */}
-          {/* Head contrast Color */}
-          {/* <ColorPicker
-              label="Head Contrast Color"
-              color={headContrastColor}
-              setColor={setHeadContrastColor}
-              randomizeColor={randomizeHeadContrastColor}
-            /> */}
-          {/* Background Color */}
-          {/* <ColorPicker
-              label="Background Color"
-              color={backgroundColor}
-              setColor={setBackgroundColor}
-              randomizeColor={randomizeBackgroundColor}
-            /> */}
-          {/* Skin Color */}
-          {/* <ColorPicker
-              label="Skin Color"
-              color={skinColor}
-              setColor={setSkinColor}
-              randomizeColor={randomizeSkinColor}
-            />
-          </div> */}
 
           <div className="flex items-center justify-between">
             {/* Previous button */}
@@ -453,43 +366,6 @@ export default function AvatarCustomizer() {
               &gt;
             </button>
           </div>
-
-          {/* <div className="attribute-buttons">
-            {attributeChoices.map((choice, index) => (
-              <button
-                key={index}
-                onClick={() =>
-                  setAttributeIndexes((prev) => ({
-                    ...prev,
-                    [activeAttribute]: index,
-                  }))
-                }
-                className={`btn choice-btn ${
-                  attributeIndexes[activeAttribute] === index ? "active" : ""
-                }`}
-              >
-                <Image
-                  src={createAvatar(openPeeps, {
-                    size: 64,
-                    [activeAttribute]: [choice] as unknown,
-                    accessoriesProbability:
-                      activeAttribute === "accessories" ? 100 : 0,
-                    facialHairProbability:
-                      activeAttribute === "facialHair" ? 100 : 0,
-                    maskProbability: activeAttribute === "mask" ? 100 : 0,
-                    clothingColor: [clothingColor],
-                    headContrastColor: [headContrastColor],
-                    backgroundColor: [backgroundColor],
-                    skinColor: [skinColor],
-                  }).toDataUri()}
-                  alt={`${choice} preview`}
-                  height={64}
-                  width={64}
-                />
-                <span>{choice}</span>
-              </button>
-            ))}
-          </div> */}
         </div>
       </div>
     </div>
