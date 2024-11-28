@@ -135,13 +135,13 @@ export default function AvatarCustomizer() {
 
           {/* Randomize selected Button */}
 
-          <RandomizeControls
+          {/* <RandomizeControls
             randomizeSelectedAttribute={randomizeSelectedAttribute}
             randomizeAllItems={randomizeAllItems}
             randomizeAllColors={randomizeAllColors}
             randomizeAll={randomizeAll}
             activeAttribute={activeAttribute}
-          />
+          /> */}
 
           {/* Toggle Button for Accessories and facial hair*/}
           <ToggleButton
@@ -151,7 +151,7 @@ export default function AvatarCustomizer() {
 
           {/* Choose Colors */}
 
-          <ColorCombinePickers
+          {/* <ColorCombinePickers
             clothingColor={clothingColor}
             headContrastColor={headContrastColor}
             backgroundColor={backgroundColor}
@@ -164,15 +164,15 @@ export default function AvatarCustomizer() {
             randomizeHeadContrastColor={randomizeHeadContrastColor}
             randomizeBackgroundColor={randomizeBackgroundColor}
             randomizeSkinColor={randomizeSkinColor}
-          />
+          /> */}
 
-          <DisplayCurrentChoice
+          {/* <DisplayCurrentChoice
             attributeChoices={attributeChoices}
             activeAttribute={activeAttribute}
             isEnabled={isEnabled}
             attributeIndexes={attributeIndexes}
             handleNavigation={handleNavigation}
-          />
+          /> */}
 
           {/* display options */}
           <ButtonOptions

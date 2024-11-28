@@ -22,32 +22,55 @@ const ButtonOptions = ({
   const { clothingColor, headContrastColor, backgroundColor, skinColor } =
     useAvatar();
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(3);
 
-  const gridSize = 9;
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCount(3);
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(5);
+      } else {
+        setVisibleCount(7);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleCarouselNavigation = (direction: "left" | "right") => {
     setVisibleStartIndex((prev) => {
       const totalChoices = attributeChoices.length;
       if (direction === "right") {
-        return Math.min(prev + gridSize, totalChoices - gridSize);
+        return (prev + visibleCount) % totalChoices;
       } else {
-        return Math.max(prev - gridSize, 0);
+        return (prev - visibleCount + totalChoices) % totalChoices;
       }
     });
   };
 
-  useEffect(() => {
-    setVisibleStartIndex(0);
-  }, [activeAttribute]);
-
   const visibleChoices = attributeChoices.slice(
     visibleStartIndex,
-    visibleStartIndex + gridSize
+    visibleStartIndex + visibleCount
   );
 
+  if (visibleChoices.length < visibleCount) {
+    visibleChoices.push(
+      ...attributeChoices.slice(0, visibleCount - visibleChoices.length)
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="grid grid-cols-3 gap-4">
+    <div className="flex items-center">
+      <button
+        onClick={() => handleCarouselNavigation("left")}
+        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+      >
+        &lt;
+      </button>
+
+      <div className="flex gap-2">
         {visibleChoices.map((choice, index) => (
           <button
             key={index}
@@ -58,11 +81,11 @@ const ButtonOptions = ({
                   (visibleStartIndex + index) % attributeChoices.length,
               }))
             }
-            className={`flex flex-col items-center gap-1 p-2 border rounded ${
+            className={`btn choice-btn ${
               attributeIndexes[activeAttribute] ===
               (visibleStartIndex + index) % attributeChoices.length
-                ? "border-blue-500 bg-blue-100"
-                : "border-gray-300 bg-white"
+                ? "active"
+                : ""
             }`}
           >
             <Image
@@ -73,7 +96,6 @@ const ButtonOptions = ({
                   activeAttribute === "accessories" ? 100 : 0,
                 facialHairProbability:
                   activeAttribute === "facialHair" ? 100 : 0,
-                maskProbability: activeAttribute === "mask" ? 100 : 0,
                 clothingColor: [clothingColor],
                 headContrastColor: [headContrastColor],
                 backgroundColor: [backgroundColor],
@@ -82,37 +104,17 @@ const ButtonOptions = ({
               alt={`${choice} preview`}
               height={64}
               width={64}
-              className="rounded"
             />
-            <span className="text-xs truncate text-gray-900">{choice}</span>
+            <span className="truncate">{choice}</span>
           </button>
         ))}
       </div>
-
-      <div className="flex justify-between w-full">
-        <button
-          onClick={() => handleCarouselNavigation("left")}
-          className={`px-4 py-2 rounded ${
-            visibleStartIndex > 0
-              ? "bg-gray-300 hover:bg-gray-400 text-white"
-              : "bg-gray-200 cursor-not-allowed"
-          }`}
-          disabled={visibleStartIndex === 0}
-        >
-          &lt;
-        </button>
-        <button
-          onClick={() => handleCarouselNavigation("right")}
-          className={`px-4 py-2 rounded ${
-            visibleStartIndex + gridSize < attributeChoices.length
-              ? "bg-gray-300 hover:bg-gray-400 text-white"
-              : "bg-gray-200 cursor-not-allowed"
-          }`}
-          disabled={visibleStartIndex + gridSize >= attributeChoices.length}
-        >
-          &gt;
-        </button>
-      </div>
+      <button
+        onClick={() => handleCarouselNavigation("right")}
+        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+      >
+        &gt;
+      </button>
     </div>
   );
 };
