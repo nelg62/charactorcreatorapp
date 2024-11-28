@@ -120,12 +120,12 @@ export default function AvatarCustomizer() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="flex w-full max-w-5xl bg-white shadow-lg rounded-lg">
+    <div className="flex h-screen flex-col items-center justify-center bg-gray-100">
+      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg">
         {/* Display current avatar */}
         <AvatarPreview avatarDataPreview={avatarDataPreview} />
 
-        <div className="w-2/3 p-6 flex flex-col gap-6">
+        <div className="md:w-2/3 w-full p-1 md:p-6 flex flex-col gap-6">
           {/* Attribute Selector */}
           <AttributeSelector
             extractedEnums={extractedEnums}
@@ -151,7 +151,7 @@ export default function AvatarCustomizer() {
 
           {/* Choose Colors */}
 
-          {/* <ColorCombinePickers
+          <ColorCombinePickers
             clothingColor={clothingColor}
             headContrastColor={headContrastColor}
             backgroundColor={backgroundColor}
@@ -164,15 +164,15 @@ export default function AvatarCustomizer() {
             randomizeHeadContrastColor={randomizeHeadContrastColor}
             randomizeBackgroundColor={randomizeBackgroundColor}
             randomizeSkinColor={randomizeSkinColor}
-          /> */}
+          />
 
-          {/* <DisplayCurrentChoice
+          <DisplayCurrentChoice
             attributeChoices={attributeChoices}
             activeAttribute={activeAttribute}
             isEnabled={isEnabled}
             attributeIndexes={attributeIndexes}
             handleNavigation={handleNavigation}
-          /> */}
+          />
 
           {/* display options */}
           <ButtonOptions

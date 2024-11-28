@@ -30,27 +30,27 @@ export default function ColorCombinePickers({
   randomizeSkinColor,
 }: ColorCombinePickersProps) {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-4 gap-4">
       <ColorPicker
-        label="Clothing Color"
+        label="Clothing"
         color={clothingColor}
         setColor={setClothingColor}
         randomizeColor={randomizeClothingColor}
       />
       <ColorPicker
-        label="Head Contrast Color"
+        label="Head"
         color={headContrastColor}
         setColor={setHeadContrastColor}
         randomizeColor={randomizeHeadContrastColor}
       />
       <ColorPicker
-        label="Background Color"
+        label="Background"
         color={backgroundColor}
         setColor={setBackgroundColor}
         randomizeColor={randomizeBackgroundColor}
       />
       <ColorPicker
-        label="Skin Color"
+        label="Skin"
         color={skinColor}
         setColor={setSkinColor}
         randomizeColor={randomizeSkinColor}

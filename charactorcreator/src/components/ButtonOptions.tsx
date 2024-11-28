@@ -94,7 +94,7 @@ const ButtonOptions = ({
           onClick={() => handleCarouselNavigation("left")}
           className={`px-4 py-2 rounded ${
             visibleStartIndex > 0
-              ? "bg-gray-300 hover:bg-gray-400 text-white"
+              ? "bg-gray-300 hover:bg-gray-400 text-gray-900"
               : "bg-gray-200 cursor-not-allowed"
           }`}
           disabled={visibleStartIndex === 0}
@@ -105,7 +105,7 @@ const ButtonOptions = ({
           onClick={() => handleCarouselNavigation("right")}
           className={`px-4 py-2 rounded ${
             visibleStartIndex + gridSize < attributeChoices.length
-              ? "bg-gray-300 hover:bg-gray-400 text-white"
+              ? "bg-gray-300 hover:bg-gray-400 text-gray-900"
               : "bg-gray-200 cursor-not-allowed"
           }`}
           disabled={visibleStartIndex + gridSize >= attributeChoices.length}

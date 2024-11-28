@@ -24,9 +24,9 @@ export default function DisplayCurrentChoice({
       {/* Previous button */}
       <button
         onClick={() => handleNavigation("previous")}
-        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        className="px-4 py-2 text-gray-900 bg-gray-300 rounded hover:bg-gray-400"
       >
-        Previous
+        &lt;
       </button>
 
       {/* Display preview of current attribute choice */}
@@ -88,11 +88,11 @@ export default function DisplayCurrentChoice({
               backgroundColor: [backgroundColor],
             }).toDataUri()}
             alt="Avatar Item Preview"
-            height={128}
-            width={128}
+            height={64}
+            width={64}
           />
         )}
-        <h1 className="text-center">
+        <h1 className="text-center text-gray-900">
           {
             attributeChoices[
               attributeIndexes[activeAttribute as keyof typeof attributeIndexes]
@@ -100,8 +100,11 @@ export default function DisplayCurrentChoice({
           }
         </h1>
       </div>
-      <button onClick={() => handleNavigation("next")} className="btn">
-        Next
+      <button
+        onClick={() => handleNavigation("next")}
+        className="px-4 py-2 text-gray-900 bg-gray-300 rounded hover:bg-gray-400"
+      >
+        &gt;
       </button>
     </div>
   );

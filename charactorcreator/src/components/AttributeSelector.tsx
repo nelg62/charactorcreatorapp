@@ -17,8 +17,8 @@ const AttributeSelector: React.FC<AttributeSelectorProps> = ({
           onClick={() => setActiveAttribute(attribute)}
           className={`py-2 px-4 text-sm font-medium rounded ${
             activeAttribute === attribute
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-900 hover:bg-gray-300 "
+              ? "bg-blue-600 text-white truncate"
+              : "bg-gray-200 text-gray-900 hover:bg-gray-300 truncate"
           }`}
         >
           {attribute}
