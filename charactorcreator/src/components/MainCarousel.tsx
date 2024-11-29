@@ -12,6 +12,10 @@ import ButtonOptions from "./ButtonOptions";
 import AttributeSelector from "./AttributeSelector";
 
 export default function AvatarCustomizer() {
+  const [showColorPickers, setShowColorPickers] = useState(true);
+  const [showAccessories, setShowAccessories] = useState(true);
+  const [showRandomizer, setShowRandomizer] = useState(true);
+
   // context variables
   const {
     extractedEnums,
@@ -120,18 +124,41 @@ export default function AvatarCustomizer() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gray-100">
-      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Display current avatar */}
         <AvatarPreview avatarDataPreview={avatarDataPreview} />
 
-        <div className="md:w-2/3 w-full p-1 md:p-6 flex flex-col gap-6">
+        <div className="w-full md:w-2/3 p-4 md:p-6 flex flex-col gap-6">
           {/* Attribute Selector */}
           <AttributeSelector
             extractedEnums={extractedEnums}
             activeAttribute={activeAttribute}
             setActiveAttribute={setActiveAttribute}
           />
+
+          {/* Toggle Buttons for Visibility */}
+
+          <div className="flex gap-4 mb-6">
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={() => setShowColorPickers((prev) => !prev)}
+            >
+              Toggle Color Picker
+            </button>
+            <button
+              className="px-4 py-2 bg-green-500 text-white rounded"
+              onClick={() => setShowAccessories((prev) => !prev)}
+            >
+              Toggle Accessories
+            </button>
+            <button
+              className="px-4 py-2 bg-orange-500 text-white rounded"
+              onClick={() => setShowRandomizer((prev) => !prev)}
+            >
+              Toggle Randomizer
+            </button>
+          </div>
 
           {/* Randomize selected Button */}
 
@@ -144,43 +171,50 @@ export default function AvatarCustomizer() {
           /> */}
 
           {/* Toggle Button for Accessories and facial hair*/}
-          <ToggleButton
-            activeAttribute={activeAttribute}
-            isEnabled={isEnabled}
-          />
+          {showAccessories && (
+            <ToggleButton
+              activeAttribute={activeAttribute}
+              isEnabled={isEnabled}
+            />
+          )}
 
           {/* Choose Colors */}
+          {showColorPickers && (
+            <ColorCombinePickers
+              clothingColor={clothingColor}
+              headContrastColor={headContrastColor}
+              backgroundColor={backgroundColor}
+              skinColor={skinColor}
+              setClothingColor={setClothingColor}
+              setHeadContrastColor={setHeadContrastColor}
+              setBackgroundColor={setBackgroundColor}
+              setSkinColor={setSkinColor}
+              randomizeClothingColor={randomizeClothingColor}
+              randomizeHeadContrastColor={randomizeHeadContrastColor}
+              randomizeBackgroundColor={randomizeBackgroundColor}
+              randomizeSkinColor={randomizeSkinColor}
+            />
+          )}
 
-          <ColorCombinePickers
-            clothingColor={clothingColor}
-            headContrastColor={headContrastColor}
-            backgroundColor={backgroundColor}
-            skinColor={skinColor}
-            setClothingColor={setClothingColor}
-            setHeadContrastColor={setHeadContrastColor}
-            setBackgroundColor={setBackgroundColor}
-            setSkinColor={setSkinColor}
-            randomizeClothingColor={randomizeClothingColor}
-            randomizeHeadContrastColor={randomizeHeadContrastColor}
-            randomizeBackgroundColor={randomizeBackgroundColor}
-            randomizeSkinColor={randomizeSkinColor}
-          />
-
-          <DisplayCurrentChoice
-            attributeChoices={attributeChoices}
-            activeAttribute={activeAttribute}
-            isEnabled={isEnabled}
-            attributeIndexes={attributeIndexes}
-            handleNavigation={handleNavigation}
-          />
+          {showAccessories && (
+            <DisplayCurrentChoice
+              attributeChoices={attributeChoices}
+              activeAttribute={activeAttribute}
+              isEnabled={isEnabled}
+              attributeIndexes={attributeIndexes}
+              handleNavigation={handleNavigation}
+            />
+          )}
 
           {/* display options */}
-          <ButtonOptions
-            attributeChoices={attributeChoices}
-            setAttributeIndexes={setAttributeIndexes}
-            activeAttribute={activeAttribute}
-            attributeIndexes={attributeIndexes}
-          />
+          {showAccessories && (
+            <ButtonOptions
+              attributeChoices={attributeChoices}
+              setAttributeIndexes={setAttributeIndexes}
+              activeAttribute={activeAttribute}
+              attributeIndexes={attributeIndexes}
+            />
+          )}
         </div>
       </div>
     </div>

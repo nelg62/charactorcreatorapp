@@ -8,7 +8,7 @@ export default function AvatarPreview({
   avatarDataPreview,
 }: AvatarPreviewProps) {
   return (
-    <div className=" w-full md:w-1/3 p-2 flex items-center justify-center md:border-r">
+    <div className=" w-full md:w-1/3 p-4 flex items-center justify-center md:border-r">
       <Image
         src={avatarDataPreview}
         alt="Display Avatar"

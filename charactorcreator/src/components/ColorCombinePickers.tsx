@@ -30,7 +30,7 @@ export default function ColorCombinePickers({
   randomizeSkinColor,
 }: ColorCombinePickersProps) {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
       <ColorPicker
         label="Clothing"
         color={clothingColor}
