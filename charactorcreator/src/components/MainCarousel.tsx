@@ -88,17 +88,17 @@ export default function AvatarCustomizer() {
   ]);
 
   // Generalized Navigation fuunction
-  const handleNavigation = (direction: "next" | "previous") => {
-    setAttributeIndexes((prev) => {
-      const currentIndex = prev[activeAttribute];
-      const totalChoices = attributeChoices.length;
-      const newIndex =
-        direction === "next"
-          ? (currentIndex + 1) % totalChoices
-          : (currentIndex - 1 + totalChoices) % totalChoices;
-      return { ...prev, [activeAttribute]: newIndex };
-    });
-  };
+  // const handleNavigation = (direction: "next" | "previous") => {
+  //   setAttributeIndexes((prev) => {
+  //     const currentIndex = prev[activeAttribute];
+  //     const totalChoices = attributeChoices.length;
+  //     const newIndex =
+  //       direction === "next"
+  //         ? (currentIndex + 1) % totalChoices
+  //         : (currentIndex - 1 + totalChoices) % totalChoices;
+  //     return { ...prev, [activeAttribute]: newIndex };
+  //   });
+  // };
 
   const randomizeAllItems = () => {
     const newIndexes = { ...attributeIndexes };
@@ -123,6 +123,24 @@ export default function AvatarCustomizer() {
     randomizeAllColors();
   };
 
+  const toggleChangeColor = () => {
+    setShowColorPickers(true);
+    setShowAccessories(false);
+    setShowRandomizer(false);
+  };
+
+  const toggleAccessories = () => {
+    setShowAccessories(true);
+    setShowColorPickers(false);
+    setShowRandomizer(false);
+  };
+
+  const toggleRandomizer = () => {
+    setShowColorPickers(false);
+    setShowAccessories(false);
+    setShowRandomizer(true);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg overflow-hidden">
@@ -142,33 +160,37 @@ export default function AvatarCustomizer() {
           <div className="flex gap-4 mb-6">
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={() => setShowColorPickers((prev) => !prev)}
+              // onClick={() => setShowColorPickers((prev) => !prev)}
+              onClick={() => toggleChangeColor()}
             >
               Toggle Color Picker
             </button>
             <button
               className="px-4 py-2 bg-green-500 text-white rounded"
-              onClick={() => setShowAccessories((prev) => !prev)}
+              // onClick={() => setShowAccessories((prev) => !prev)}
+              onClick={() => toggleAccessories()}
             >
               Toggle Accessories
             </button>
             <button
               className="px-4 py-2 bg-orange-500 text-white rounded"
-              onClick={() => setShowRandomizer((prev) => !prev)}
+              // onClick={() => setShowRandomizer((prev) => !prev)}
+              onClick={() => toggleRandomizer()}
             >
               Toggle Randomizer
             </button>
           </div>
 
           {/* Randomize selected Button */}
-
-          {/* <RandomizeControls
-            randomizeSelectedAttribute={randomizeSelectedAttribute}
-            randomizeAllItems={randomizeAllItems}
-            randomizeAllColors={randomizeAllColors}
-            randomizeAll={randomizeAll}
-            activeAttribute={activeAttribute}
-          /> */}
+          {showRandomizer && (
+            <RandomizeControls
+              randomizeSelectedAttribute={randomizeSelectedAttribute}
+              randomizeAllItems={randomizeAllItems}
+              randomizeAllColors={randomizeAllColors}
+              randomizeAll={randomizeAll}
+              activeAttribute={activeAttribute}
+            />
+          )}
 
           {/* Toggle Button for Accessories and facial hair*/}
           {showAccessories && (
@@ -179,7 +201,7 @@ export default function AvatarCustomizer() {
           )}
 
           {/* Choose Colors */}
-          {showColorPickers && (
+          {/* {showColorPickers && (
             <ColorCombinePickers
               clothingColor={clothingColor}
               headContrastColor={headContrastColor}
@@ -194,9 +216,9 @@ export default function AvatarCustomizer() {
               randomizeBackgroundColor={randomizeBackgroundColor}
               randomizeSkinColor={randomizeSkinColor}
             />
-          )}
+          )} */}
 
-          {showAccessories && (
+          {/* {showAccessories && (
             <DisplayCurrentChoice
               attributeChoices={attributeChoices}
               activeAttribute={activeAttribute}
@@ -204,7 +226,7 @@ export default function AvatarCustomizer() {
               attributeIndexes={attributeIndexes}
               handleNavigation={handleNavigation}
             />
-          )}
+          )} */}
 
           {/* display options */}
           {showAccessories && (

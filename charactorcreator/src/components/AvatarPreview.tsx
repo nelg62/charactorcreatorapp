@@ -8,13 +8,13 @@ export default function AvatarPreview({
   avatarDataPreview,
 }: AvatarPreviewProps) {
   return (
-    <div className=" w-full md:w-1/3 p-4 flex items-center justify-center md:border-r">
+    <div className="md:h-1/2 w-full md:w-1/3 p-4 flex items-center justify-center md:border-r">
       <Image
         src={avatarDataPreview}
         alt="Display Avatar"
-        height={100}
-        width={100}
-        className="rounded-full border border-gray-300"
+        height={500}
+        width={500}
+        className="max-h-28 max-w-28 md:max-h-48 md:max-w-48 rounded-full border border-gray-300"
       />
     </div>
   );
