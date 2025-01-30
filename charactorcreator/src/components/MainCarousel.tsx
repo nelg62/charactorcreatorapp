@@ -153,6 +153,9 @@ export default function AvatarCustomizer() {
             extractedEnums={extractedEnums}
             activeAttribute={activeAttribute}
             setActiveAttribute={setActiveAttribute}
+            attributeIndexes={attributeIndexes}
+            isEnabled={isEnabled}
+            attributeChoices={attributeChoices}
           />
 
           {/* Toggle Buttons for Visibility */}
@@ -201,7 +204,7 @@ export default function AvatarCustomizer() {
           )}
 
           {/* Choose Colors */}
-          {/* {showColorPickers && (
+          {showColorPickers && (
             <ColorCombinePickers
               clothingColor={clothingColor}
               headContrastColor={headContrastColor}
@@ -216,7 +219,7 @@ export default function AvatarCustomizer() {
               randomizeBackgroundColor={randomizeBackgroundColor}
               randomizeSkinColor={randomizeSkinColor}
             />
-          )} */}
+          )}
 
           {/* {showAccessories && (
             <DisplayCurrentChoice
