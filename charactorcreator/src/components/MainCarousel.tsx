@@ -7,7 +7,7 @@ import AvatarPreview from "./AvatarPreview";
 import RandomizeControls from "./RandomizeControls";
 import ColorCombinePickers from "./ColorCombinePickers";
 import ToggleButton from "./ToggleButton";
-import DisplayCurrentChoice from "./DisplayCurrentChoice";
+// import DisplayCurrentChoice from "./DisplayCurrentChoice";
 import ButtonOptions from "./ButtonOptions";
 import AttributeSelector from "./AttributeSelector";
 
