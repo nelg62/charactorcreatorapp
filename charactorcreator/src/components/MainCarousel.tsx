@@ -142,7 +142,7 @@ export default function AvatarCustomizer() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-retroBlue text-gray-800 font-pixel p-4">
       <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Display current avatar */}
         <AvatarPreview avatarDataPreview={avatarDataPreview} />
@@ -162,21 +162,21 @@ export default function AvatarCustomizer() {
 
           <div className="flex gap-4 mb-6">
             <button
-              className="px-4 py-2 bg-blue-500 text-white rounded"
+              className="px-4 py-2 font-pixel text-sm border-2 border-black rounded shadow-md bg-retroOrange text-black hover:bg-retroGreen transition-all"
               // onClick={() => setShowColorPickers((prev) => !prev)}
               onClick={() => toggleChangeColor()}
             >
               Toggle Color Picker
             </button>
             <button
-              className="px-4 py-2 bg-green-500 text-white rounded"
+              className="px-4 py-2 font-pixel text-sm border-2 border-black rounded shadow-md bg-retroOrange text-black hover:bg-retroGreen transition-all"
               // onClick={() => setShowAccessories((prev) => !prev)}
               onClick={() => toggleAccessories()}
             >
               Toggle Accessories
             </button>
             <button
-              className="px-4 py-2 bg-orange-500 text-white rounded"
+              className="px-4 py-2 font-pixel text-sm border-2 border-black rounded shadow-md bg-retroOrange text-black hover:bg-retroGreen transition-all"
               // onClick={() => setShowRandomizer((prev) => !prev)}
               onClick={() => toggleRandomizer()}
             >

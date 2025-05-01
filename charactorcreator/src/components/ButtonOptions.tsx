@@ -61,8 +61,8 @@ const ButtonOptions = ({
             className={`flex flex-col items-center gap-1 p-2 border rounded ${
               attributeIndexes[activeAttribute] ===
               (visibleStartIndex + index) % attributeChoices.length
-                ? "border-blue-500 bg-blue-100"
-                : "border-gray-300 bg-white"
+                ? "bg-retroGreen text-black border-black"
+                : "bg-white text-black border-gray-700 hover:bg-retroOrange"
             }`}
           >
             <Image

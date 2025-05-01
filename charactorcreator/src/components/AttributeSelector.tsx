@@ -32,10 +32,10 @@ const AttributeSelector: React.FC<AttributeSelectorProps> = ({
           <button
             key={attribute}
             onClick={() => setActiveAttribute(attribute)}
-            className={`py-2 px-4 text-sm font-medium rounded ${
+            className={`py-2 px-4 text-xs font-bold border-2 rounded-md shadow-lg transition-all duration-200 ${
               activeAttribute === attribute
-                ? "bg-blue-600 text-white truncate"
-                : "bg-gray-200 text-gray-900 hover:bg-gray-300 truncate"
+                ? "bg-retroGreen text-black border-black"
+                : "bg-white text-black border-gray-700 hover:bg-retroOrange"
             }`}
           >
             <div className="preview-display">
