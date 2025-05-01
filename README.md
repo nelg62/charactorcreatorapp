@@ -7,3 +7,5 @@
 <!-- add other character choices -->
 
 <!-- mabie add the options as buttons to choose and keep the left and right aswell -->
+
+Working on Design still
