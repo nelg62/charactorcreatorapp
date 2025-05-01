@@ -16,9 +16,9 @@ const AttributeSelector: React.FC<AttributeSelectorProps> = ({
   extractedEnums,
   activeAttribute,
   setActiveAttribute,
-  attributeIndexes,
-  attributeChoices,
-  isEnabled,
+  // attributeIndexes,
+  // attributeChoices,
+  // isEnabled,
 }) => {
   const { clothingColor, headContrastColor, backgroundColor, skinColor } =
     useAvatar();
