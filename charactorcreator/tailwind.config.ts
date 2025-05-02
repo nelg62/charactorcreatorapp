@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        pixel: ['"Press Start 2P"', "monospace"],
+      },
       colors: {
         retroBlue: "#88c9f9",
         retroGreen: "#b4f88f",

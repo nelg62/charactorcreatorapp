@@ -58,7 +58,7 @@ const ButtonOptions = ({
                   (visibleStartIndex + index) % attributeChoices.length,
               }))
             }
-            className={`flex flex-col items-center gap-1 p-2 border rounded ${
+            className={`flex flex-col items-center gap-1 p-2 border-2 rounded-md font-pixel transition-all ${
               attributeIndexes[activeAttribute] ===
               (visibleStartIndex + index) % attributeChoices.length
                 ? "bg-retroGreen text-black border-black"
@@ -84,18 +84,20 @@ const ButtonOptions = ({
               width={64}
               className="rounded"
             />
-            <span className="text-xs truncate text-gray-900">{choice}</span>
+            <span className="text-[10px] truncate text-black uppercase">
+              {choice}
+            </span>
           </button>
         ))}
       </div>
 
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full mt-4 font-pixel">
         <button
           onClick={() => handleCarouselNavigation("left")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded-md border-2 border-black ${
             visibleStartIndex > 0
-              ? "bg-gray-300 hover:bg-gray-400 text-gray-900"
-              : "bg-gray-200 cursor-not-allowed"
+              ? "bg-retroOrange hover:bg-retroGreen text-black"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           disabled={visibleStartIndex === 0}
         >
@@ -103,10 +105,10 @@ const ButtonOptions = ({
         </button>
         <button
           onClick={() => handleCarouselNavigation("right")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded-md border-2 border-black ${
             visibleStartIndex + gridSize < attributeChoices.length
-              ? "bg-gray-300 hover:bg-gray-400 text-gray-900"
-              : "bg-gray-200 cursor-not-allowed"
+              ? "bg-retroOrange hover:bg-retroGreen text-black"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           disabled={visibleStartIndex + gridSize >= attributeChoices.length}
         >

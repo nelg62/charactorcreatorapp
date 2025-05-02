@@ -14,25 +14,25 @@ const ColorPicker = ({
   randomizeColor,
 }: ColorPickerProps) => {
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+    <div className="p-2 bg-retroBlue rounded-lg shadow-inner border-2 border-black font-pixel">
       <label
         htmlFor={label.toLowerCase().replace(" ", "-")}
-        className="block text-sm font-medium text-gray-700"
+        className="block text-center text-xs font-bold text-black uppercase tracking-wider"
       >
-        {label}:{" "}
+        {label}
       </label>
-      <div className="flex items-center gap-2 mt-2">
+      <div className="flex items-center justify-center gap-2 mt-2">
         <input
           type="color"
           id={label.toLowerCase().replace(" ", "-")}
           value={`#${color}`}
           onChange={(e) => setColor(e.target.value.replace("#", ""))}
-          className="w-10 h-10 border-none cursor-pointer rounded-lg"
+          className="w-10 h-10 rounded-md border-2 border-black cursor-pointer"
         />
         {/* Randmize button for color picker */}
         <button
           onClick={randomizeColor}
-          className="flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded hover:bg-blue-600"
+          className="w-10 h-10 bg-retroOrange text-black border-2 border-black rounded-md flex items-center justify-center hover:bg-retroGreen transition-all"
         >
           <FaDice />
         </button>
